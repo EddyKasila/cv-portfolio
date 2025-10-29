@@ -24,8 +24,8 @@ A modern, responsive CV/portfolio website built with Astro, Bootstrap 5, and SCS
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/cv-project.git
-cd cv-project
+git clone https://github.com/EddyKasila/cv-portfolio.git
+cd cv-portfolio
 ```
 
 2. Install dependencies:

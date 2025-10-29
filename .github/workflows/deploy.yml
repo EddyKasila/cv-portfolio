@@ -29,7 +29,7 @@ jobs:
         # The `BASE_URL` is set here to match the `base` in astro.config.mjs
         run: npm run build
         env:
-          BASE_URL: /cv-project
+          BASE_URL: /cv-portfolio
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
