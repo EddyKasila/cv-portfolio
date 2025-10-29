@@ -1,0 +1,24 @@
+---
+import { cvData } from '@/data/cv.ts';
+const { programming, workflow } = cvData.skills;
+---
+<section class="resume-section" id="skills" data-aos="fade-up" data-aos-delay="100">
+    <div class="resume-section-content">
+        <h2 class="mb-5">Skills</h2>
+        <div class="subheading mb-3">Programming Languages & Tools</div>
+        <ul class="list-inline dev-icons">
+            {programming.map(skill => (
+                <li class="list-inline-item"><i class={skill.icon}></i></li>
+            ))}
+        </ul>
+        <div class="subheading mb-3">Workflow</div>
+        <ul class="fa-ul mb-0">
+            {workflow.map(item => (
+                <li>
+                    <span class="fa-li"><i class="fas fa-check"></i></span>
+                    {item}
+                </li>
+            ))}
+        </ul>
+    </div>
+</section>

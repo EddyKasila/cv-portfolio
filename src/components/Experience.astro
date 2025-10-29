@@ -1,0 +1,28 @@
+---
+import { cvData } from '@/data/cv.ts';
+const { experience } = cvData;
+---
+<section class="resume-section" id="experience" data-aos="fade-up" data-aos-delay="100">
+    <div class="resume-section-content">
+        <h2 class="mb-5">Experience</h2>
+        {experience.map(job => (
+            <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0">{job.role}</h3>
+                    <div class="subheading mb-3">{job.company}</div>
+                    <ul class="fa-ul mb-0">
+                        {job.tasks.map(task => (
+                            <li>
+                                <span class="fa-li"><i class="fas fa-check"></i></span>
+                                {task}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div class="flex-shrink-0">
+                    <span class="text-primary">{job.period}</span>
+                </div>
+            </div>
+        ))}
+    </div>
+</section>

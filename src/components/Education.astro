@@ -1,0 +1,19 @@
+---
+import { cvData } from '@/data/cv.ts';
+const { education } = cvData;
+---
+<section class="resume-section" id="education" data-aos="fade-up" data-aos-delay="100">
+    <div class="resume-section-content">
+        <h2 class="mb-5">Education</h2>
+        {education.map(edu => (
+            <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                <div class="flex-grow-1">
+                    <h3 class="mb-0">{edu.institution}</h3>
+                    <div class="subheading mb-3">{edu.degree}</div>
+                    <div>{edu.field}</div>
+                </div>
+                <div class="flex-shrink-0"><span class="text-primary">{edu.period}</span></div>
+            </div>
+        ))}
+    </div>
+</section>

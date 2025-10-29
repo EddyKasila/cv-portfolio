@@ -1,0 +1,30 @@
+// 
+// Social Icons
+// 
+
+.social-icons {
+    .social-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 3.5rem;
+        width: 3.5rem;
+        background: linear-gradient(135deg, $primary 0%, $gradient-end 100%);
+        color: #ffffff !important;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        margin-right: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        
+        &:last-child {
+            margin-right: 0;
+        }
+        
+        &:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px -3px rgba($primary, 0.4);
+            background: linear-gradient(135deg, darken($primary, 10%) 0%, darken($gradient-end, 10%) 100%);
+        }
+    }
+}

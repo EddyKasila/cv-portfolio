@@ -1,0 +1,17 @@
+---
+import { cvData } from '@/data/cv.ts';
+const { awards } = cvData;
+---
+<section class="resume-section" id="awards" data-aos="fade-up" data-aos-delay="100">
+    <div class="resume-section-content">
+        <h2 class="mb-5">Awards & Certifications</h2>
+        <ul class="fa-ul mb-0">
+            {awards.map(award => (
+                <li>
+                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
+                    {award}
+                </li>
+            ))}
+        </ul>
+    </div>
+</section>

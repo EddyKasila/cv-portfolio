@@ -1,0 +1,26 @@
+---
+import { cvData } from '@/data/cv.ts';
+const { name, address, phone, email, summary, social } = cvData.about;
+---
+<section class="resume-section" id="about" data-aos="fade-up">
+    <div class="resume-section-content">
+        <h1 class="mb-0">
+            {name.split(' ')[0]}
+            <span class="text-primary">{name.split(' ')[1]}</span>
+        </h1>
+        <div class="subheading mb-5">
+            {address} ·
+            <a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>
+            ·
+            <a href={`mailto:${email}`}>{email}</a>
+        </div>
+        <p class="lead mb-5">{summary}</p>
+        <div class="social-icons">
+            {social.map(link => (
+                <a class="social-icon" href={link.url} aria-label={link.name}>
+                    <i class={link.icon}></i>
+                </a>
+            ))}
+        </div>
+    </div>
+</section>

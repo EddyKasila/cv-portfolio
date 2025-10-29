@@ -1,0 +1,13 @@
+// 
+// Styles
+// 
+// Import your custom variable definitions.
+@import "./variables/colors.scss";
+@import "./variables/typography.scss";
+@import "./variables/spacing.scss";
+
+// Import your project-specific styles.
+@import "./global.scss";
+@import "./components/sidenav.scss";
+@import "./components/icons.scss";
+@import "./sections/resume-section.scss";
