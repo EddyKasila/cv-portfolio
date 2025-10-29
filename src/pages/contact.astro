@@ -1,0 +1,38 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { cvData } from '@/data/cv';
+import Tile from '@/components/Tile.astro';
+---
+<Layout title={`${cvData.about.name} - Contact`} description={`Contact ${cvData.about.name}`}>
+    <div class="band">
+        <div class="container">
+            <div class="band-header"><h1>Let’s talk</h1></div>
+        </div>
+    </div>
+    <section class="tiles-section container">
+        <div class="tiles-grid">
+            <Tile title="Contact form" subtitle="I’ll get back to you soon">
+                <form class="contact-form" data-netlify="true" name="contact" method="POST">
+                    <input type="hidden" name="form-name" value="contact" />
+                    <div class="row">
+                        <div class="col"><label>First Name *</label><input required name="firstName" type="text" /></div>
+                        <div class="col"><label>Last Name *</label><input required name="lastName" type="text" /></div>
+                    </div>
+                    <label>Email *</label><input required name="email" type="email" />
+                    <label>Subject</label><input name="subject" type="text" />
+                    <label>Message</label><textarea name="message" rows="5"></textarea>
+                    <button class="btn btn-primary" type="submit">Send</button>
+                </form>
+            </Tile>
+        </div>
+    </section>
+
+    <style>
+        .contact-form { display: grid; gap: 1rem; }
+        .contact-form label { font-weight: 600; margin-bottom: .25rem; display: block; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: .75rem; border: 1px solid #e5e7eb; border-radius: 10px; }
+        .row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 768px) { .row { grid-template-columns: 1fr 1fr; } }
+    </style>
+</Layout>
+

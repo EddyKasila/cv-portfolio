@@ -1,0 +1,17 @@
+.tiles-section {
+    /* Center section and constrain width similar to template */
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+
+    .tiles-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* always stack vertically */
+        gap: 1.5rem;
+    }
+}
+

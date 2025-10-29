@@ -1,18 +1,35 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import About from '@/components/About.astro';
-import Experience from '@/components/Experience.astro';
-import Education from '@/components/Education.astro';
-import Skills from '@/components/Skills.astro';
-import Interests from '@/components/Interests.astro';
-import Awards from '@/components/Awards.astro';
+import { cvData } from '@/data/cv';
+import Tile from '@/components/Tile.astro';
 ---
+<Layout title={`${cvData.about.name} - Portfolio`} description={cvData.about.summary}>
+    <section class="container home-hero">
+        <div class="hero-grid">
+            <Tile title={cvData.about.name} subtitle="Project Operations & IT" imageSrc="/assets/img/profile.jpg" imageAlt={cvData.about.name}>
+                <div class="social-icons">
+                    {cvData.about.social.map((s) => (
+                        <a class="social-icon" href={s.url} aria-label={s.name}><i class={s.icon}></i></a>
+                    ))}
+                </div>
+            </Tile>
+            <div class="hero-copy">
+                <h1>Hello</h1>
+                <p class="lead">{cvData.about.summary}</p>
+                <div class="cta">
+                    <a class="btn btn-primary me-3" href="/resume">Resume</a>
+                    <a class="btn btn-outline-secondary me-3" href="/projects">Projects</a>
+                    <a class="btn btn-outline-secondary" href="/EDWIN KASILA NGULI - CV.pdf" download>Download CV</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<Layout title="Edwin Nguli - CV/Portfolio" description="Edwin Nguli - IT and project operations management professional with experience in impact evaluations, data analysis, and team leadership.">
-	<About />
-	<Experience />
-	<Education />
-	<Skills />
-	<Interests />
-	<Awards />
+    <style>
+        .home-hero { padding: 3rem 1rem; max-width: 1200px; background: linear-gradient(to right, #e9dfd3 0 50%, transparent 50% 100%); }
+        .hero-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; }
+        .hero-copy h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 800; }
+        .cta { margin-top: 1rem; }
+        @media (min-width: 992px) { .hero-grid { grid-template-columns: 420px 1fr; } }
+    </style>
 </Layout>

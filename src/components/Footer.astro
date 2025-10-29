@@ -1,0 +1,33 @@
+---
+import { cvData } from '@/data/cv';
+const { phone, email, address } = cvData.about;
+---
+<footer class="site-footer">
+    <div class="footer-inner container py-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-12 col-md-4">
+                <strong>Call</strong><div>{phone}</div>
+            </div>
+            <div class="col-12 col-md-4">
+                <strong>Write</strong><div><a href={`mailto:${email}`}>{email}</a></div>
+            </div>
+            <div class="col-12 col-md-4">
+                <strong>Location</strong><div>{address}</div>
+            </div>
+        </div>
+        <div class="small text-muted mt-3">© {new Date().getFullYear()} {cvData.about.name}. All rights reserved.</div>
+    </div>
+</footer>
+
+<style>
+    .site-footer { background: #fff; border-top: 1px solid rgba(0,0,0,.06); }
+    .site-footer a { color: inherit; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    strong { display: inline-block; margin-right: .5rem; }
+    .small { color: #64748b; }
+    .container { padding-left: 1rem; padding-right: 1rem; }
+    .row { display: flex; flex-wrap: wrap; }
+    .col-12 { width: 100%; }
+    @media (min-width: 768px) { .col-md-4 { width: 33.333%; } }
+</style>
+

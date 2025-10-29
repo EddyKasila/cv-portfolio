@@ -1,0 +1,31 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { cvData } from '@/data/cv';
+import Tile from '@/components/Tile.astro';
+---
+<Layout title={`${cvData.about.name} - Projects`} description={`Projects by ${cvData.about.name}`}>
+    <div class="band">
+        <div class="container">
+            <div class="band-header"><h1>Projects</h1></div>
+        </div>
+    </div>
+    <section class="tiles-section container">
+        <div class="tiles-grid">
+            {cvData.projects?.map((p, idx) => (
+                <Tile
+                    title={p.name}
+                    subtitle={p.role}
+                    meta={p.period}
+                    imageSrc={p.image}
+                    imageAlt={p.name}
+                    href={p.url}
+                    badge={p.tag}
+                    aosDelay={idx * 80}
+                >
+                    <p>{p.summary}</p>
+                </Tile>
+            ))}
+        </div>
+    </section>
+</Layout>
+

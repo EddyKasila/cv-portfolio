@@ -6,20 +6,18 @@
 
 window.addEventListener('DOMContentLoaded', event => {
 
-    // Activate Bootstrap scrollspy on the main nav element
-    const sideNav = document.body.querySelector('#sideNav');
-    if (sideNav) {
+    // Activate Bootstrap scrollspy on the top nav element
+    const topNav = document.body.querySelector('#topNav');
+    if (topNav) {
         new bootstrap.ScrollSpy(document.body, {
-            target: '#sideNav',
+            target: '#topNav',
             rootMargin: '0px 0px -40%',
         });
     };
 
     // Collapse responsive navbar when toggler is visible
     const navbarToggler = document.body.querySelector('.navbar-toggler');
-    const responsiveNavItems = [].slice.call(
-        document.querySelectorAll('#navbarResponsive .nav-link')
-    );
+    const responsiveNavItems = [].slice.call(document.querySelectorAll('#navbarResponsive .nav-link'));
     responsiveNavItems.map(function (responsiveNavItem) {
         responsiveNavItem.addEventListener('click', () => {
             if (window.getComputedStyle(navbarToggler).display !== 'none') {
@@ -53,9 +51,9 @@ window.addEventListener('DOMContentLoaded', event => {
 
         // Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
         offset: 120, // offset (in px) from the original trigger point
-        delay: 0, // values from 0 to 3000, with step 50ms
-        duration: 800, // values from 0 to 3000, with step 50ms
-        easing: 'ease', // default easing for AOS animations
+        delay: 0, // element-specific delays set via data-aos-delay
+        duration: 600, // snappier transitions
+        easing: 'ease-out', // smoother exit feel
         once: true, // whether animation should happen only once - while scrolling down
         mirror: false, // whether elements should animate out while scrolling past them
         anchorPlacement: 'top-bottom', // defines which position of the element should trigger the animation

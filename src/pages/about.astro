@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { cvData } from '@/data/cv';
+import Tile from '@/components/Tile.astro';
+---
+<Layout title={`${cvData.about.name} - About`} description={cvData.about.summary}>
+    <section class="container about-hero">
+        <div class="about-grid">
+            <article class="profile-card" data-aos="fade-right" data-aos-delay="0">
+                <div class="profile-inner">
+                    <img class="profile-photo" src="/assets/img/profile.jpg" alt={cvData.about.name} />
+                    <h2 class="profile-name">{cvData.about.name}</h2>
+                    <div class="divider"></div>
+                    <div class="profile-title">PROJECT MANAGER</div>
+                </div>
+                <div class="profile-socials">
+                    {cvData.about.social.map((s) => (
+                        <a class="social-icon" href={s.url} aria-label={s.name}><i class={s.icon}></i></a>
+                    ))}
+                </div>
+            </article>
+            <div class="about-copy" data-aos="fade-left" data-aos-delay="80">
+                <h1>Profile</h1>
+                <p class="lead">Summary</p>
+                <div class="cta mb-3">
+                    <a class="btn btn-primary me-3" href="/resume">Resume</a>
+                    <a class="btn btn-outline-secondary" href="/projects">Projects</a>
+                </div>
+                <p>{cvData.about.summary}</p>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .about-hero { padding: 3rem 1rem; max-width: 1200px; margin-left: auto; margin-right: auto; background: linear-gradient(to right, #e9dfd3 0 33%, transparent 33% 100%); min-height: calc(100vh - 140px); display: flex; align-items: center; }
+        .about-hero .about-grid { width: 100%; }
+        .about-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; }
+        .profile-card { background: #f7f1ea; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; }
+        .profile-inner { padding: 2rem; text-align: center; }
+        .profile-photo { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 1rem; }
+        .profile-name { font-weight: 700; margin: 0 0 .5rem; }
+        .divider { width: 64px; height: 4px; background: #0d6efd; margin: .5rem auto 1rem; border-radius: 4px; }
+        .profile-title { letter-spacing: .25rem; font-weight: 600; color: #374151; }
+        .profile-socials { background: #ffffff; padding: 1rem 1.25rem; display: flex; justify-content: center; gap: 1.25rem; border-top: 1px solid rgba(0,0,0,.06); }
+        .profile-socials .social-icon { color: #111827; font-size: 1.125rem; }
+        .about-copy h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 800; }
+        .lead { font-weight: 600; color: #111; }
+        @media (min-width: 992px) { .about-grid { grid-template-columns: 420px 1fr; } }
+    </style>
+</Layout>
+

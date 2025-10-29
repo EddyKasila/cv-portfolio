@@ -8,6 +8,8 @@
 
 // Import your project-specific styles.
 @import "./global.scss";
-@import "./components/sidenav.scss";
+// top nav styles are inline in component for now
 @import "./components/icons.scss";
 @import "./sections/resume-section.scss";
+@import "./sections/tiles.scss";
+@import "./sections/template.scss";

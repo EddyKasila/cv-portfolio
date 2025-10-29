@@ -1,0 +1,75 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { cvData } from '@/data/cv';
+import Tile from '@/components/Tile.astro';
+---
+<Layout title={`${cvData.about.name} - Resume`} description={`${cvData.about.name} resume`}>
+    <div class="band">
+        <div class="container">
+            <div class="band-header">
+                <h1>Resume</h1>
+                <div class="actions"><a class="btn btn-primary" href="/EDWIN KASILA NGULI - CV.pdf" download>Download CV</a></div>
+            </div>
+        </div>
+    </div>
+    <section class="tiles-section container">
+
+        <h2>Experience</h2>
+        <div class="tiles-grid">
+            {cvData.experience.map((exp, idx) => (
+                <Tile
+                    layout="two-col"
+                    aosDelay={idx * 80}
+                    title={`${exp.role}`}
+                    subtitle={exp.period}
+                    meta={exp.company}
+                >
+                    <div slot="left">
+                        <!-- left column is title/subtitle/meta already above -->
+                    </div>
+                    <div>
+                        <ul>
+                            {exp.tasks.map(t => (<li>{t}</li>))}
+                        </ul>
+                    </div>
+                </Tile>
+            ))}
+        </div>
+
+        <h2 class="mt-4">Education & Skills</h2>
+        <div class="tiles-grid">
+            <Tile title="Education" aosDelay={0}>
+                <ul class="education-list">
+                    {cvData.education.map(ed => (
+                        <li>
+                            <div class="degree"><strong>{ed.degree}</strong> – {ed.field}</div>
+                            <div class="institution">
+                                {ed.institution}
+                                <span class="period">{ed.period}</span>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </Tile>
+        </div>
+        
+        <div class="tiles-grid">
+            <Tile title="Skills" aosDelay={80}>
+                <ul class="skills-list">
+                    <li>Data Management</li>
+                    <li>Project Management</li>
+                    <li>Hardware/Software Config.</li>
+                    <li>Systems Evaluation</li>
+                    <li>Data Visualization & Analysis</li>
+                    <li>Research and Analysis</li>
+                    <li>Monitoring & Impact Evaluation</li>
+                </ul>
+                <div class="skills-icons-row">
+                    {cvData.skills.programming.map(s => (
+                        <span class="skills-icon" title={s.name}><i class={s.icon}></i></span>
+                    ))}
+                </div>
+            </Tile>
+        </div>
+    </section>
+</Layout>
