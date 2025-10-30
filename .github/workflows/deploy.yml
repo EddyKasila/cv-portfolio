@@ -38,4 +38,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist # The folder the action should deploy.
+          no_jekyll: true # Disable Jekyll on GitHub Pages
           token: ${{ secrets.GITHUB_TOKEN }}
