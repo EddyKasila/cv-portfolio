@@ -1,31 +1,21 @@
 ---
-import { cv } from '../data/cv';
-
-const navLinks = [
-  { name: 'About', url: '#about' },
-  { name: 'Experience', url: '#experience' },
-  { name: 'Education', url: '#education' },
-  { name: 'Skills', url: '#skills' },
-  { name: 'Awards', url: '#awards' },
-  { name: 'Interests', url: '#interests' },
-];
 ---
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-  <!-- This link now correctly points to the #about section -->
   <a class="navbar-brand js-scroll-trigger" href="#about">
-    <span class="d-block d-lg-none">{cv.basics.name}</span>
+    <span class="d-block d-lg-none">Edwin Nguli</span>
     <span class="d-none d-lg-block">
-      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src={cv.basics.image} alt="Profile" />
+      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/cv-portfolio/assets/img/profile.jpg" alt="Profile" />
     </span>
   </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav">
-      {navLinks.map(link => (
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href={link.url}>{link.name}</a>
-        </li>
-      ))}
+      <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+      <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#experience">Experience</a></li>
+      <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Education</a></li>
+      <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li>
+      <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#interests">Interests</a></li>
+      <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards</a></li>
     </ul>
   </div>
 </nav>
