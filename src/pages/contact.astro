@@ -20,8 +20,14 @@ import Tile from '@/components/Tile.astro';
                     <label for="email">Email *</label><input required name="email" id="email" type="email" />
                     <label for="subject">Subject</label><input name="subject" id="subject" type="text" />
                     <label for="message">Message</label><textarea name="message" id="message" rows="4"></textarea>
+                    <input type="hidden" name="_replyto" value="" />
                     <button class="btn btn-primary" type="submit">Send</button>
                 </form>
+                <script>
+                    document.querySelector('.contact-form').addEventListener('submit', function() {
+                        this.querySelector('[name="_replyto"]').value = this.querySelector('[name="email"]').value;
+                    });
+                </script>
             </Tile>
         </div>
     </section>
