@@ -94,7 +94,6 @@ export const cvData = {
             "Research and Analysis",
             "Hardware/Software Conﬁg.",
             "Monitoring & Impact Evaluation",
-            "Research and Analysis",
         ]
     },
     awards: [
@@ -104,8 +103,8 @@ export const cvData = {
         "Msc Public Policy and Management",
     ],
     interests: {
-        p1: "",
-        p2: ""
+        p1: "I am passionate about leveraging technology and data-driven approaches to solve complex challenges in international development, public policy, and project management. I enjoy exploring innovations in impact evaluation, mobile data collection, and research methodologies that drive evidence-based decision-making.",
+        p2: "Outside of work, I have a keen interest in road safety innovations, smart mobility solutions, and the intersection of tech and public good. I also enjoy engaging with emerging trends in AI, data visualization, and digital transformation in Africa."
     },
     projects: [
         {

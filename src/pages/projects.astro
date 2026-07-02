@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import { cvData } from '@/data/cv';
 import Tile from '@/components/Tile.astro';
+import { asset } from '@/utils/paths';
 ---
 <Layout title={`${cvData.about.name} - Projects`} description={`Projects by ${cvData.about.name}`}>
     <div class="band">
@@ -16,7 +17,7 @@ import Tile from '@/components/Tile.astro';
                     title={p.name}
                     subtitle={p.role}
                     meta={p.period}
-                    imageSrc={p.image}
+                    imageSrc={asset(p.image)}
                     imageAlt={p.name}
                     href={p.url}
                     badge={p.tag}

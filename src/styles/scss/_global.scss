@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // 
 // Global
 // 
@@ -66,7 +68,7 @@ p.lead {
     transition: all 0.3s ease;
     
     &.btn-primary {
-        background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+        background: linear-gradient(135deg, $primary 0%, color.adjust($primary, $lightness: -10%) 100%);
         border: none;
         
         &:hover {

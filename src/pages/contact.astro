@@ -6,14 +6,13 @@ import Tile from '@/components/Tile.astro';
 <Layout title={`${cvData.about.name} - Contact`} description={`Contact ${cvData.about.name}`}>
     <div class="band">
         <div class="container">
-            <div class="band-header"><h1>Let’s talk</h1></div>
+            <div class="band-header"><h1>Let\u2019s talk</h1></div>
         </div>
     </div>
     <section class="tiles-section container">
         <div class="tiles-grid">
-            <Tile title="Contact form" subtitle="I’ll get back to you soon">
-                <form class="contact-form" data-netlify="true" name="contact" method="POST">
-                    <input type="hidden" name="form-name" value="contact" />
+            <Tile title="Contact form" subtitle="I\u2019ll get back to you soon">
+                <form class="contact-form" action="mailto:eddynguli@gmail.com" method="post" enctype="text/plain">
                     <div class="row">
                         <div class="col"><label>First Name *</label><input required name="firstName" type="text" /></div>
                         <div class="col"><label>Last Name *</label><input required name="lastName" type="text" /></div>
@@ -35,4 +34,3 @@ import Tile from '@/components/Tile.astro';
         @media (min-width: 768px) { .row { grid-template-columns: 1fr 1fr; } }
     </style>
 </Layout>
-

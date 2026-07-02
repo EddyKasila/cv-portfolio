@@ -2,13 +2,14 @@
 import Layout from '@/layouts/Layout.astro';
 import { cvData } from '@/data/cv';
 import Tile from '@/components/Tile.astro';
+import { asset } from '@/utils/paths';
 ---
 <Layout title={`${cvData.about.name} - Resume`} description={`${cvData.about.name} resume`}>
     <div class="band">
         <div class="container">
             <div class="band-header">
                 <h1>Resume</h1>
-                <div class="actions"><a class="btn btn-primary" href="/EDWIN KASILA NGULI - CV.pdf" download>Download CV</a></div>
+                <div class="actions"><a class="btn btn-primary" href={asset('/EDWIN KASILA NGULI - CV.pdf')} download>Download CV</a></div>
             </div>
         </div>
     </div>

@@ -2,13 +2,14 @@
 import Layout from '@/layouts/Layout.astro';
 import { cvData } from '@/data/cv';
 import Tile from '@/components/Tile.astro';
+import { asset } from '@/utils/paths';
 ---
 <Layout title={`${cvData.about.name} - About`} description={cvData.about.summary}>
     <section class="container about-hero">
         <div class="about-grid">
             <article class="profile-card" data-aos="fade-right" data-aos-delay="0">
                 <div class="profile-inner">
-                    <img class="profile-photo" src="/assets/img/profile.jpg" alt={cvData.about.name} />
+                    <img class="profile-photo" src={asset('/assets/img/profile.jpg')} alt={cvData.about.name} />
                     <h2 class="profile-name">{cvData.about.name}</h2>
                     <div class="divider"></div>
                     <div class="profile-title">PROJECT MANAGER</div>
@@ -23,8 +24,8 @@ import Tile from '@/components/Tile.astro';
                 <h1>Profile</h1>
                 <p class="lead">Summary</p>
                 <div class="cta mb-3">
-                    <a class="btn btn-primary me-3" href="/resume">Resume</a>
-                    <a class="btn btn-outline-secondary" href="/projects">Projects</a>
+                    <a class="btn btn-primary me-3" href={asset('/resume')}>Resume</a>
+                    <a class="btn btn-outline-secondary" href={asset('/projects')}>Projects</a>
                 </div>
                 <p>{cvData.about.summary}</p>
             </div>

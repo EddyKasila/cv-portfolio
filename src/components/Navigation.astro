@@ -1,20 +1,20 @@
 ---
-import { cv } from '../data/cv';
+import { cvData } from '@/data/cv';
+import { asset } from '@/utils/paths';
 
 const navLinks = [
-  { name: 'About', url: '#about' },
-  { name: 'Experience', url: '#experience' },
-  { name: 'Education', url: '#education' },
-  { name: 'Skills', url: '#skills' },
-  { name: 'Awards', url: '#awards' },
-  { name: 'Interests', url: '#interests' },
+  { name: 'Home', url: '/' },
+  { name: 'About', url: '/about' },
+  { name: 'Resume', url: '/resume' },
+  { name: 'Projects', url: '/projects' },
+  { name: 'Contact', url: '/contact' },
 ];
 ---
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-  <a class="navbar-brand js-scroll-trigger" href="#about">
-    <span class="d-block d-lg-none">{cv.basics.name}</span>
+  <a class="navbar-brand js-scroll-trigger" href={asset('/')}>
+    <span class="d-block d-lg-none">{cvData.about.name}</span>
     <span class="d-none d-lg-block">
-      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src={cv.basics.image} alt={`Profile of ${cv.basics.name}`} />
+      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src={asset('/assets/img/profile.jpg')} alt={`Profile of ${cvData.about.name}`} />
     </span>
   </a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -22,9 +22,14 @@ const navLinks = [
     <ul class="navbar-nav">
       {navLinks.map(link => (
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href={link.url}>{link.name}</a>
+          <a class="nav-link js-scroll-trigger" href={asset(link.url)}>{link.name}</a>
         </li>
       ))}
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="theme-toggle" aria-label="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </a>
+      </li>
     </ul>
   </div>
 </nav>

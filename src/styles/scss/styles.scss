@@ -1,15 +1,11 @@
-// 
-// Styles
-// 
-// Import your custom variable definitions.
+@use 'sass:color';
+
 @import "./variables/colors.scss";
 @import "./variables/typography.scss";
 @import "./variables/spacing.scss";
-
-// Import your project-specific styles.
 @import "./global.scss";
-// top nav styles are inline in component for now
 @import "./components/icons.scss";
+@import "./components/sidenav.scss";
 @import "./sections/resume-section.scss";
 @import "./sections/tiles.scss";
 @import "./sections/template.scss";
