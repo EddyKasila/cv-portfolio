@@ -1,5 +1,6 @@
 ---
 import { cvData } from '@/data/cv';
+import { asset } from '@/utils/paths';
 const { phone, email, address } = cvData.about;
 ---
 <footer class="site-footer">
@@ -9,7 +10,7 @@ const { phone, email, address } = cvData.about;
                 <strong>Call</strong><div>{phone}</div>
             </div>
             <div class="col-12 col-md-4">
-                <strong>Write</strong><div><a href={`mailto:${email}`}>{email}</a></div>
+                <strong>Write</strong><div><a href={asset('/contact')}>{email}</a></div>
             </div>
             <div class="col-12 col-md-4">
                 <strong>Location</strong><div>{address}</div>
