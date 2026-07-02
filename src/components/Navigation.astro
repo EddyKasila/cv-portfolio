@@ -4,32 +4,49 @@ import { asset } from '@/utils/paths';
 
 const navLinks = [
   { name: 'Home', url: '/' },
-  { name: 'About', url: '/about' },
   { name: 'Resume', url: '/resume' },
   { name: 'Projects', url: '/projects' },
   { name: 'Contact', url: '/contact' },
 ];
 ---
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-  <a class="navbar-brand js-scroll-trigger" href={asset('/')}>
-    <span class="d-block d-lg-none">{cvData.about.name}</span>
-    <span class="d-none d-lg-block">
-      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src={asset('/assets/img/profile.jpg')} alt={`Profile of ${cvData.about.name}`} />
-    </span>
-  </a>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav">
-      {navLinks.map(link => (
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href={asset(link.url)}>{link.name}</a>
-        </li>
-      ))}
-      <li class="nav-item">
-        <a class="nav-link" href="#" id="theme-toggle" aria-label="Toggle theme">
-          <i class="fas fa-moon"></i>
-        </a>
-      </li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top top-nav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href={asset('/')}>{cvData.about.name}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {navLinks.map(link => (
+          <li class="nav-item">
+            <a class="nav-link" href={asset(link.url)}>{link.name}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </nav>
+
+<style>
+  .top-nav {
+    background: linear-gradient(135deg, #6366f1 0%, #764ba2 100%);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    padding: 0.5rem 0;
+  }
+  .top-nav .navbar-brand {
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+  .top-nav .nav-link {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+  }
+  .top-nav .nav-link:hover {
+    background: rgba(255,255,255,0.15);
+  }
+</style>

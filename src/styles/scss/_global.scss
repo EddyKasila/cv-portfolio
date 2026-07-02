@@ -7,8 +7,8 @@
 body {
     font-family: $font-family-sans-serif;
     color: $text-primary;
-    padding-top: $navbar-base-height;
-    background: #e9dfd3; /* beige background like template */
+    padding-top: 64px;
+    background: #e9dfd3;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -16,8 +16,6 @@ body {
 
 .site-main { flex: 1 0 auto; }
 footer.site-footer { flex-shrink: 0; }
-
-/* No sidebar offset; top navbar layout */
 
 h1,
 h2,
