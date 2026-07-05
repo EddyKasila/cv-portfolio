@@ -46,7 +46,8 @@ class AdminApp {
 
   private redirectToLogin(): void {
     const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') || '/';
-    window.location.href = `${base}login`;
+    const normalizedBase = base.endsWith('/') ? base : base + '/';
+    window.location.href = `${normalizedBase}login/`;
   }
 
   private renderSidebar(): void {
