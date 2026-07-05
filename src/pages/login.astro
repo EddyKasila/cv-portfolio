@@ -38,7 +38,7 @@ const adminUrl = asset('/admin/');
       <div class="login-error" id="loginError">Invalid username or password</div>
     </form>
   </div>
-  <script type="module">
+  <script>
     import { AuthService } from '@/lib/auth';
     const form = document.getElementById('loginForm');
     form.addEventListener('submit', function(e) {
