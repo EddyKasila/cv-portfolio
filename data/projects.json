@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Cash-Based Transfers (CBT) and Gender Impact Evaluation - Isiolo County, Kenya",
+    "role": "Project Coordinator",
+    "period": "2019 - 2024",
+    "tag": "Impact Evaluation",
+    "image": "/assets/img/wbglogo.webp",
+    "url": "#",
+    "summary": "As Field Coordinator for the World Bank\u2019s Development Impact Evaluation (DIME) initiative and the World Food Programme (WFP), I led field operations for a large-scale impact evaluation assessing the outcomes of cash-based transfer interventions and their gender-related impacts. My work involved translating research objectives into practical implementation strategies, supervising data collection, coordinating with county government and community stakeholders, and monitoring cash transfer activities to ensure adherence to evaluation protocols. I played a central role in community mobilization, training facilitation, and real-time field reporting\u2014helping deliver high-quality data and actionable insights that informed program design and gender-responsive policy recommendations.",
+    "highlights": ["Community mobilization", "Data quality assurance", "Stakeholder coordination"],
+    "status": "completed"
+  },
+  {
+    "name": "Smart Matatu \u2013 Public Transport Safety Monitoring and Rating (Nairobi, Kenya)",
+    "role": "Consultant Project Manager",
+    "period": "2019 - 2022",
+    "tag": "Project Management",
+    "image": "/assets/img/echomobilelogo.png",
+    "url": "#",
+    "summary": "As Deployment Team Lead at Echo Mobile, I managed a pioneering road safety project in collaboration with the University of California, Berkeley Economics Research team. The Smart Matatu initiative developed and deployed in-vehicle sensor technology to monitor driving behavior in Kenya\u2019s minibus (matatu) industry. By analyzing sensor data and passenger feedback, our team generated evidence-based safety ratings that empowered commuters to identify safer transport options and promoted accountability among vehicle owners and SACCOs. I oversaw project deployment, stakeholder coordination, enumerator supervision, and data analysis\u2014delivering a model now recognized for its innovation in improving public transport safety through data-driven insights.",
+    "highlights": ["Sensor deployment", "Stakeholder engagement", "Data analysis"],
+    "status": "completed"
+  },
+  {
+    "name": "Research Project: \u201cE-Commerce Behavioral and SME Onboarding Studies \u2013 UC Berkeley & Jumia Kenya",
+    "role": "Research Project Manager",
+    "period": "2019 - 2022",
+    "tag": "Research",
+    "image": "/assets/img/ucb.png",
+    "url": "#",
+    "summary": "As Research Project Manager, I led two high-impact studies in collaboration with Jumia Kenya and the University of California, Berkeley Economics Research Team. The first explored how customer service agent gender influenced user engagement and purchasing behavior on the Jumia platform, while the second assessed how shifting SME onboarding from remote to on-site training affected seller performance and platform adoption. I coordinated end-to-end project execution\u2014research design, data collection, and analysis\u2014and translated findings into actionable recommendations that enhanced customer satisfaction, SME integration, and operational efficiency within Jumia\u2019s e-commerce ecosystem.",
+    "highlights": ["Research design", "Data collection & analysis", "Client management"],
+    "status": "completed"
+  }
+]

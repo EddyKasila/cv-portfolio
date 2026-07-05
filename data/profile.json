@@ -1,0 +1,21 @@
+{
+  "name": "Edwin Nguli",
+  "title": "Project Coordinator",
+  "tagline": "Bridging technology, data, and impact in international development",
+  "summary": "Dynamic and results-oriented Project Coordinator with over 5 years of experience in coordinating impactful projects for esteemed organizations such as the World Bank Group, WFP, and Echo Mobile. Proven expertise in driving successful deployment initiatives, managing complex impact evaluation projects, and fostering collaboration with stakeholders. Adept at translating project objectives into actionable strategies, ensuring adherence to timelines, and maintaining high standards of data quality. Recognized for leadership, effective communication, and consistently achieving project milestones.",
+  "photo": "/assets/img/profile.jpg",
+  "location": "Nairobi, Kenya",
+  "address": "Nairobi · P.O BOX 58436 - 00100",
+  "email": "eddynguli@gmail.com",
+  "phone": "+254703686559",
+  "resumeUrl": "/EDWIN KASILA NGULI - CV.pdf",
+  "social": [
+    { "platform": "linkedin", "label": "LinkedIn", "url": "https://www.linkedin.com/in/edwinkasila", "icon": "fab fa-linkedin-in" },
+    { "platform": "github", "label": "GitHub", "url": "https://github.com/EddyKasila", "icon": "fab fa-github" },
+    { "platform": "twitter", "label": "Twitter", "url": "https://twitter.com/your-twitter-username", "icon": "fab fa-twitter" }
+  ],
+  "interests": {
+    "p1": "I am passionate about leveraging technology and data-driven approaches to solve complex challenges in international development, public policy, and project management. I enjoy exploring innovations in impact evaluation, mobile data collection, and research methodologies that drive evidence-based decision-making.",
+    "p2": "Outside of work, I have a keen interest in road safety innovations, smart mobility solutions, and the intersection of tech and public good. I also enjoy engaging with emerging trends in AI, data visualization, and digital transformation in Africa."
+  }
+}
