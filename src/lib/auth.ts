@@ -3,7 +3,8 @@ interface AuthCredentials {
   password: string;
 }
 
-const STORAGE_KEY = 'portfolioos_auth';
+export const STORAGE_KEY = 'portfolioos_auth';
+
 const DEFAULT_CREDENTIALS: AuthCredentials = {
   username: 'admin',
   password: 'portfolioos2024',
@@ -23,8 +24,8 @@ export class AuthService {
   }
 
   static login(username: string, password: string): boolean {
-    const stored = this.getStoredCredentials();
-    if (username !== stored.username || password !== stored.password) {
+    const creds = this.getStoredCredentials();
+    if (username !== creds.username || password !== creds.password) {
       return false;
     }
     const session = {
@@ -41,10 +42,18 @@ export class AuthService {
   }
 
   static getStoredCredentials(): AuthCredentials {
-    const env = typeof process !== 'undefined' ? process as any : {};
-    return {
-      username: (typeof window !== 'undefined' && (window as any).__PORTFOLIOOS_USERNAME) || env.PUBLIC_ADMIN_USERNAME || DEFAULT_CREDENTIALS.username,
-      password: (typeof window !== 'undefined' && (window as any).__PORTFOLIOOS_PASSWORD) || env.PUBLIC_ADMIN_PASSWORD || DEFAULT_CREDENTIALS.password,
-    };
+    if (typeof window !== 'undefined') {
+      const win = window as any;
+      if (win.__PORTFOLIOOS_USERNAME && win.__PORTFOLIOOS_PASSWORD) {
+        return { username: win.__PORTFOLIOOS_USERNAME, password: win.__PORTFOLIOOS_PASSWORD };
+      }
+    }
+    try {
+      const env = import.meta.env;
+      if (env.PUBLIC_ADMIN_USERNAME && env.PUBLIC_ADMIN_PASSWORD) {
+        return { username: env.PUBLIC_ADMIN_USERNAME, password: env.PUBLIC_ADMIN_PASSWORD };
+      }
+    } catch {}
+    return { ...DEFAULT_CREDENTIALS };
   }
 }

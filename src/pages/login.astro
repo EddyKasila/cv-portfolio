@@ -1,5 +1,6 @@
 ---
 import { asset } from '@/utils/paths';
+const adminUrl = asset('/admin');
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +25,7 @@ import { asset } from '@/utils/paths';
     <div class="logo">PortfolioOS</div>
     <h1>Welcome back</h1>
     <p>Sign in to manage your portfolio</p>
-    <form id="loginForm">
+    <form id="loginForm" data-redirect={adminUrl}>
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input type="text" class="form-control" id="username" required autocomplete="username" />
@@ -37,17 +38,15 @@ import { asset } from '@/utils/paths';
       <div class="login-error" id="loginError">Invalid username or password</div>
     </form>
   </div>
-  <script>
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASSWORD = 'portfolioos2024';
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+  <script type="module">
+    import { AuthService } from '@/lib/auth';
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        const session = { authenticated: true, loginTime: Date.now(), expiry: Date.now() + 86400000 };
-        localStorage.setItem('portfolioos_auth', JSON.stringify(session));
-        window.location.href = '{asset("/admin")}';
+      if (AuthService.login(username, password)) {
+        window.location.href = form.getAttribute('data-redirect');
       } else {
         document.getElementById('loginError').style.display = 'block';
       }
