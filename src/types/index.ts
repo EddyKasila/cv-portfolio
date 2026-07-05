@@ -92,6 +92,15 @@ export interface Contact {
   fields: Record<string, ContactField>;
 }
 
+export interface Settings {
+  siteTitle: string;
+  siteDescription: string;
+  siteUrl: string;
+  copyright: string;
+  showContactForm: boolean;
+  emailNotifications: boolean;
+}
+
 export type ContentType = keyof ContentMap;
 
 export interface ContentMap {
@@ -103,4 +112,5 @@ export interface ContentMap {
   certifications: Certification[];
   articles: Article[];
   contact: Contact;
+  settings: Settings;
 }

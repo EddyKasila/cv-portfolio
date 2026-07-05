@@ -245,19 +245,19 @@ const baseUrl = asset('');
   <div class="toast" id="toast"></div>
 
   <script>
-    import { adminApp, renderDashboard, renderProfile } from '@/lib/admin';
+    import { adminApp, renderDashboard, renderProfile, renderExperience, renderProjects, renderEducation, renderSkills, renderCertifications, renderSettings } from '@/lib/admin';
 
     adminApp.register({ id: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high', enabled: true, render: renderDashboard });
     adminApp.register({ id: 'profile', label: 'Profile', icon: 'fa-user', enabled: true, render: renderProfile });
-    adminApp.register({ id: 'experience', label: 'Experience', icon: 'fa-briefcase', enabled: false });
-    adminApp.register({ id: 'projects', label: 'Projects', icon: 'fa-diagram-project', enabled: false });
-    adminApp.register({ id: 'education', label: 'Education', icon: 'fa-graduation-cap', enabled: false });
-    adminApp.register({ id: 'skills', label: 'Skills', icon: 'fa-code', enabled: false });
-    adminApp.register({ id: 'certifications', label: 'Certifications', icon: 'fa-certificate', enabled: false });
+    adminApp.register({ id: 'experience', label: 'Experience', icon: 'fa-briefcase', enabled: true, render: renderExperience });
+    adminApp.register({ id: 'projects', label: 'Projects', icon: 'fa-diagram-project', enabled: true, render: renderProjects });
+    adminApp.register({ id: 'education', label: 'Education', icon: 'fa-graduation-cap', enabled: true, render: renderEducation });
+    adminApp.register({ id: 'skills', label: 'Skills', icon: 'fa-code', enabled: true, render: renderSkills });
+    adminApp.register({ id: 'certifications', label: 'Certifications', icon: 'fa-certificate', enabled: true, render: renderCertifications });
+    adminApp.register({ id: 'settings', label: 'Settings', icon: 'fa-gear', enabled: true, render: renderSettings });
     adminApp.register({ id: 'articles', label: 'Articles', icon: 'fa-newspaper', enabled: false });
     adminApp.register({ id: 'contact', label: 'Contact', icon: 'fa-envelope', enabled: false });
     adminApp.register({ id: 'seo', label: 'SEO', icon: 'fa-magnifying-glass', enabled: false });
-    adminApp.register({ id: 'settings', label: 'Settings', icon: 'fa-gear', enabled: false });
 
     adminApp.boot();
 
