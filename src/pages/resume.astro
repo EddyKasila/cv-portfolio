@@ -1,9 +1,14 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { cvData } from '@/data/cv';
+import { ContentService } from '@/lib/content';
+import type { Profile, Experience, Education, Skills } from '@/types';
 import Tile from '@/components/Tile.astro';
+const profile = ContentService.getSync<Profile>('profile');
+const experience = ContentService.getSync<Experience[]>('experience');
+const education = ContentService.getSync<Education[]>('education');
+const skills = ContentService.getSync<Skills>('skills');
 ---
-<Layout title={`${cvData.about.name} - Resume`} description={`${cvData.about.name} resume`}>
+<Layout title={`${profile.name} - Resume`} description={`${profile.name} resume`}>
     <div class="band">
         <div class="container">
             <div class="band-header">
@@ -15,7 +20,7 @@ import Tile from '@/components/Tile.astro';
 
         <h2>Experience</h2>
         <div class="tiles-grid">
-            {cvData.experience.map((exp, idx) => (
+            {experience.map((exp, idx) => (
                 <Tile
                     aosDelay={idx * 80}
                     title={exp.role}
@@ -35,7 +40,7 @@ import Tile from '@/components/Tile.astro';
         <div class="tiles-grid">
             <Tile title="Education" aosDelay={0}>
                 <ul class="education-list">
-                    {cvData.education.map(ed => (
+                    {education.map(ed => (
                         <li>
                             <div class="degree"><strong>{ed.degree}</strong> – {ed.field}</div>
                             <div class="institution">
@@ -51,16 +56,10 @@ import Tile from '@/components/Tile.astro';
         <div class="tiles-grid">
             <Tile title="Skills" aosDelay={80}>
                 <ul class="skills-list">
-                    <li>Data Management</li>
-                    <li>Project Management</li>
-                    <li>Hardware/Software Config.</li>
-                    <li>Systems Evaluation</li>
-                    <li>Data Visualization & Analysis</li>
-                    <li>Research and Analysis</li>
-                    <li>Monitoring & Impact Evaluation</li>
+                    {skills.professional.map(s => (<li>{s}</li>))}
                 </ul>
                 <div class="skills-icons-row">
-                    {cvData.skills.programming.map(s => (
+                    {skills.programming.map(s => (
                         <span class="skills-icon" title={s.name}><i class={s.icon}></i></span>
                     ))}
                 </div>

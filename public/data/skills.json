@@ -1,0 +1,18 @@
+{
+  "programming": [
+    { "name": "HTML5", "icon": "fab fa-html5", "category": "frontend" },
+    { "name": "CSS3", "icon": "fab fa-css3-alt", "category": "frontend" },
+    { "name": "Sass", "icon": "fab fa-sass", "category": "frontend" },
+    { "name": "JavaScript", "icon": "fab fa-js-square", "category": "frontend" },
+    { "name": "Astro", "icon": "fab fa-react", "category": "frontend" },
+    { "name": "Node.js", "icon": "fab fa-node-js", "category": "backend" }
+  ],
+  "professional": [
+    "Project Management",
+    "Data Analysis, Visualization & Management",
+    "Team Leadership",
+    "Research and Analysis",
+    "Hardware/Software Configuration",
+    "Monitoring & Impact Evaluation"
+  ]
+}

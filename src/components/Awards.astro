@@ -1,15 +1,16 @@
 ---
-import { cvData } from '@/data/cv.ts';
-const { awards } = cvData;
+import { ContentService } from '@/lib/content';
+import type { Certification } from '@/types';
+const certifications = ContentService.getSync<Certification[]>('certifications');
 ---
 <section class="resume-section" id="awards" data-aos="fade-up" data-aos-delay="100">
     <div class="resume-section-content">
         <h2 class="mb-5">Awards & Certifications</h2>
         <ul class="fa-ul mb-0">
-            {awards.map(award => (
+            {certifications.map(cert => (
                 <li>
                     <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    {award}
+                    {cert.name}
                 </li>
             ))}
         </ul>

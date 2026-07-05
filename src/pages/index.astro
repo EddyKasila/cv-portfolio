@@ -1,28 +1,30 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { cvData } from '@/data/cv';
+import { ContentService } from '@/lib/content';
+import type { Profile } from '@/types';
 import Tile from '@/components/Tile.astro';
 import { asset } from '@/utils/paths';
+const profile = ContentService.getSync<Profile>('profile');
 ---
-<Layout title={`${cvData.about.name} - Portfolio`} description={cvData.about.summary}>
+<Layout title={`${profile.name} - Portfolio`} description={profile.summary}>
     <section class="container home-hero">
         <div class="home-grid">
             <article class="profile-card" data-aos="fade-right" data-aos-delay="0">
                 <div class="profile-inner">
-                    <img class="profile-photo" src={asset('/assets/img/profile.jpg')} alt={cvData.about.name} />
-                    <h2 class="profile-name">{cvData.about.name}</h2>
+                    <img class="profile-photo" src={asset('/assets/img/profile.jpg')} alt={profile.name} />
+                    <h2 class="profile-name">{profile.name}</h2>
                     <div class="divider"></div>
-                    <div class="profile-title">PROJECT MANAGER</div>
+                    <div class="profile-title">{profile.title.toUpperCase()}</div>
                 </div>
                 <div class="profile-socials">
-                    {cvData.about.social.map((s) => (
-                        <a class="social-icon" href={s.url} aria-label={s.name}><i class={s.icon}></i></a>
+                    {profile.social.map((s) => (
+                        <a class="social-icon" href={s.url} aria-label={s.label}><i class={s.icon}></i></a>
                     ))}
                 </div>
             </article>
             <div class="home-copy" data-aos="fade-left" data-aos-delay="80">
                 <h1>Profile</h1>
-                <p class="lead">{cvData.about.summary}</p>
+                <p class="lead">{profile.summary}</p>
                 <div class="cta">
                     <a class="btn btn-primary me-3" href={asset('/resume')}>Resume</a>
                     <a class="btn btn-outline-secondary me-3" href={asset('/projects')}>Projects</a>

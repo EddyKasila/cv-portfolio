@@ -1,7 +1,9 @@
 ---
-import { cvData } from '@/data/cv';
+import { ContentService } from '@/lib/content';
+import type { Profile } from '@/types';
 import { asset } from '@/utils/paths';
-const { phone, email, address } = cvData.about;
+const profile = ContentService.getSync<Profile>('profile');
+const { name, phone, email, address } = profile;
 ---
 <footer class="site-footer">
     <div class="footer-inner container py-4">
@@ -16,7 +18,7 @@ const { phone, email, address } = cvData.about;
                 <strong>Location</strong><div>{address}</div>
             </div>
         </div>
-        <div class="small text-muted mt-3">© {new Date().getFullYear()} {cvData.about.name}. All rights reserved.</div>
+        <div class="small text-muted mt-3">© {new Date().getFullYear()} {name}. All rights reserved.</div>
     </div>
 </footer>
 

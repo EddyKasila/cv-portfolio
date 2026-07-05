@@ -1,0 +1,12 @@
+{
+  "formspreeId": "xvzjvbdg",
+  "recipientEmail": "eddynguli@gmail.com",
+  "successMessage": "Thank you! Your message has been sent. I'll get back to you soon.",
+  "fields": {
+    "firstName": { "label": "First Name", "required": true },
+    "lastName": { "label": "Last Name", "required": true },
+    "email": { "label": "Email", "required": true },
+    "subject": { "label": "Subject", "required": false },
+    "message": { "label": "Message", "required": true }
+  }
+}

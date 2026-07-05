@@ -1,9 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { cvData } from '@/data/cv';
+import { ContentService } from '@/lib/content';
+import type { Profile, Contact } from '@/types';
 import Tile from '@/components/Tile.astro';
+const profile = ContentService.getSync<Profile>('profile');
+const contact = ContentService.getSync<Contact>('contact');
 ---
-<Layout title={`${cvData.about.name} - Contact`} description={`Contact ${cvData.about.name}`}>
+<Layout title={`${profile.name} - Contact`} description={`Contact ${profile.name}`}>
     <div class="band">
         <div class="container">
             <div class="band-header"><h1>Let's talk</h1></div>
@@ -12,7 +15,7 @@ import Tile from '@/components/Tile.astro';
     <section class="tiles-section container">
         <div class="tiles-grid">
             <Tile title="Contact form" subtitle="I'll get back to you soon">
-                <form class="contact-form" action="https://formspree.io/f/xvzjvbdg" method="POST">
+                <form class="contact-form" action={`https://formspree.io/f/${contact.formspreeId}`} method="POST">
                     <div class="row">
                         <div class="col"><label for="firstName">First Name *</label><input required name="firstName" id="firstName" type="text" /></div>
                         <div class="col"><label for="lastName">Last Name *</label><input required name="lastName" id="lastName" type="text" /></div>

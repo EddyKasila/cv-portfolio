@@ -1,6 +1,7 @@
 ---
-import { cvData } from '@/data/cv.ts';
-const { experience } = cvData;
+import { ContentService } from '@/lib/content';
+import type { Experience } from '@/types';
+const experience = ContentService.getSync<Experience[]>('experience');
 ---
 <section class="resume-section" id="experience" data-aos="fade-up" data-aos-delay="100">
     <div class="resume-section-content">

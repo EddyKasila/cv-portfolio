@@ -1,0 +1,30 @@
+[
+  {
+    "institution": "Multimedia University of Kenya",
+    "degree": "BSc Information Technology (IT)",
+    "field": "Information Science and Technology",
+    "period": "2012 - 2017",
+    "type": "degree"
+  },
+  {
+    "institution": "Strathmore University",
+    "degree": "MSc Public Policy and Management",
+    "field": "Project Management",
+    "period": "Ongoing",
+    "type": "degree"
+  },
+  {
+    "institution": "Kenya Institute of Project Management (KIPM)",
+    "degree": "Project Management Professional (PMP) Certification",
+    "field": "Project Management",
+    "period": "Ongoing",
+    "type": "certification"
+  },
+  {
+    "institution": "Multimedia University of Kenya",
+    "degree": "Professional Certificate",
+    "field": "Certified Networking Associate (CCNA)",
+    "period": "2013 - 2016",
+    "type": "certification"
+  }
+]

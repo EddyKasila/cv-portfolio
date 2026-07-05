@@ -1,6 +1,8 @@
 ---
-import { cvData } from '@/data/cv';
+import { ContentService } from '@/lib/content';
+import type { Profile } from '@/types';
 import { asset } from '@/utils/paths';
+const profile = ContentService.getSync<Profile>('profile');
 
 const navLinks = [
   { name: 'Home', url: '/' },
@@ -11,7 +13,7 @@ const navLinks = [
 ---
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top top-nav">
   <div class="container">
-    <a class="navbar-brand fw-bold" href={asset('/')}>{cvData.about.name}</a>
+    <a class="navbar-brand fw-bold" href={asset('/')}>{profile.name}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
