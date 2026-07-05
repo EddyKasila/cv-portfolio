@@ -7,7 +7,7 @@ export interface AdminModule {
   label: string;
   icon: string;
   enabled: boolean;
-  render: (container: HTMLElement) => void;
+  render?: (container: HTMLElement) => void;
   destroy?: () => void;
 }
 
@@ -23,7 +23,7 @@ class AdminApp {
 
   boot(): void {
     if (!this.checkAuth()) return;
-    this.sidebarEl = document.getElementById('adminSidebar')!;
+    this.sidebarEl = document.getElementById('sidebarNav')!;
     this.contentEl = document.getElementById('adminContent')!;
     this.renderSidebar();
     this.navigateTo('dashboard');
@@ -52,28 +52,18 @@ class AdminApp {
 
   private renderSidebar(): void {
     this.sidebarEl.innerHTML = `
-      <div class="sidebar-header">
-        <div class="sidebar-logo">PortfolioOS</div>
-        <div class="sidebar-subtitle">Admin Panel</div>
-      </div>
-      <nav class="sidebar-nav">
+      <div class="sidebar-group">
         ${this.modules.map(m => `
-          <button class="sidebar-link${m.enabled ? '' : ' disabled'}" data-module="${m.id}" ${m.enabled ? '' : 'disabled'}>
+          <button class="sidebar-item${m.enabled ? '' : ' disabled'}" data-module="${m.id}" ${m.enabled ? '' : 'disabled'}>
             <i class="fa-solid ${m.icon}"></i>
             <span>${m.label}</span>
-            ${!m.enabled ? '<small class="badge">Soon</small>' : ''}
+            ${!m.enabled ? '<span class="badge">Soon</span>' : ''}
           </button>
         `).join('')}
-      </nav>
-      <div class="sidebar-footer">
-        <button class="sidebar-link" id="logoutBtn">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Logout</span>
-        </button>
       </div>
     `;
 
-    this.sidebarEl.querySelectorAll('.sidebar-link:not(.disabled)').forEach(btn => {
+    this.sidebarEl.querySelectorAll('.sidebar-item:not(.disabled)').forEach(btn => {
       btn.addEventListener('click', () => this.navigateTo(btn.getAttribute('data-module')!));
     });
 
@@ -85,10 +75,10 @@ class AdminApp {
 
   navigateTo(moduleId: string): void {
     const mod = this.modules.find(m => m.id === moduleId);
-    if (!mod || !mod.enabled) return;
+    if (!mod || !mod.enabled || !mod.render) return;
 
     this.activeModule = moduleId;
-    this.sidebarEl.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+    this.sidebarEl.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
     const activeBtn = this.sidebarEl.querySelector(`[data-module="${moduleId}"]`);
     if (activeBtn) activeBtn.classList.add('active');
 
@@ -123,14 +113,32 @@ function exportJson(data: unknown, filename: string): void {
 }
 
 function showToast(message: string, type: 'success' | 'error' = 'success'): void {
-  const existing = document.querySelector('.admin-toast');
-  if (existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.className = `admin-toast ${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add('show'));
-  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+  const el = document.getElementById('toast')!;
+  el.className = `toast toast-${type}`;
+  const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+  el.innerHTML = `<i class="fa-solid ${icon}"></i> ${message}`;
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function openModal(title: string, body: string, footer?: string): void {
+  const overlay = document.getElementById('modalOverlay')!;
+  const content = document.getElementById('modalContent')!;
+  content.innerHTML = `
+    <div class="modal-header">
+      <h3>${title}</h3>
+      <button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">${body}</div>
+    ${footer ? `<div class="modal-footer">${footer}</div>` : ''}
+  `;
+  overlay.classList.add('open');
+  document.getElementById('modalCloseBtn')?.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+}
+
+function closeModal(): void {
+  document.getElementById('modalOverlay')!.classList.remove('open');
 }
 
 function createFieldGroup(config: {
@@ -151,7 +159,7 @@ function createFieldGroup(config: {
   label.textContent = config.label;
   if (config.required) {
     const req = document.createElement('span');
-    req.className = 'required-marker';
+    req.style.color = 'var(--danger)';
     req.textContent = ' *';
     label.appendChild(req);
   }
@@ -175,50 +183,60 @@ function createFieldGroup(config: {
 
   if (config.helpText) {
     const help = document.createElement('div');
-    help.className = 'form-help';
+    help.style.cssText = 'font-size:0.75rem;color:var(--text-muted);margin-top:4px;';
     help.textContent = config.helpText;
     group.appendChild(help);
   }
   return group;
 }
 
+/* ── Dashboard ── */
+
 export function renderDashboard(container: HTMLElement): void {
   container.innerHTML = `
-    <div class="module-header">
+    <div class="page-header">
       <h2>Dashboard</h2>
-      <p class="module-description">Overview of your PortfolioOS</p>
+      <p>Overview of your PortfolioOS content</p>
     </div>
-    <div class="dashboard-grid">
-      <div class="stat-card">
-        <i class="fa-solid fa-user"></i>
-        <div>
-          <div class="stat-value" id="statProfile">—</div>
-          <div class="stat-label">Profile</div>
-        </div>
+    <div class="stats-grid">
+      <div class="stat-card animate-in">
+        <div class="stat-icon" style="background:#eff6ff;color:#2563eb;"><i class="fa-solid fa-user"></i></div>
+        <div class="stat-value" id="statProfile">—</div>
+        <div class="stat-label">Profile</div>
+        <div class="stat-desc">Your identity & social links</div>
       </div>
-      <div class="stat-card">
-        <i class="fa-solid fa-briefcase"></i>
-        <div>
-          <div class="stat-value" id="statExperience">—</div>
-          <div class="stat-label">Experience</div>
-        </div>
+      <div class="stat-card animate-in" style="animation-delay:0.05s">
+        <div class="stat-icon" style="background:#f0fdf4;color:#059669;"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="stat-value" id="statExperience">—</div>
+        <div class="stat-label">Experience</div>
+        <div class="stat-desc">Work history entries</div>
       </div>
-      <div class="stat-card">
-        <i class="fa-solid fa-diagram-project"></i>
-        <div>
-          <div class="stat-value" id="statProjects">—</div>
-          <div class="stat-label">Projects</div>
-        </div>
+      <div class="stat-card animate-in" style="animation-delay:0.1s">
+        <div class="stat-icon" style="background:#fef2f2;color:#dc2626;"><i class="fa-solid fa-diagram-project"></i></div>
+        <div class="stat-value" id="statProjects">—</div>
+        <div class="stat-label">Projects</div>
+        <div class="stat-desc">Portfolio projects</div>
       </div>
-      <div class="stat-card">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <div>
-          <div class="stat-value" id="statEducation">—</div>
-          <div class="stat-label">Education</div>
+      <div class="stat-card animate-in" style="animation-delay:0.15s">
+        <div class="stat-icon" style="background:#faf5ff;color:#9333ea;"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="stat-value" id="statEducation">—</div>
+        <div class="stat-label">Education</div>
+        <div class="stat-desc">Degrees & certifications</div>
+      </div>
+    </div>
+    <div class="content-card">
+      <div class="content-card-header">
+        <h3><i class="fa-solid fa-clock-rotate-left" style="margin-right:8px;color:var(--text-muted);"></i> Recent Activity</h3>
+      </div>
+      <div class="content-card-body">
+        <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:0.9rem;">
+          <i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>
+          Content activity tracking coming soon
         </div>
       </div>
     </div>
   `;
+
   Promise.all([
     fetchJson<any>('data/profile.json'),
     fetchJson<any[]>('data/experience.json'),
@@ -232,34 +250,35 @@ export function renderDashboard(container: HTMLElement): void {
   });
 }
 
-export function renderProfileEditor(container: HTMLElement): void {
+/* ── Profile Editor ── */
+
+export function renderProfile(container: HTMLElement): void {
   let currentData: Profile | null = null;
 
   container.innerHTML = `
-    <div class="module-header">
+    <div class="page-header">
       <h2>Profile</h2>
-      <p class="module-description">Edit your professional profile. Changes are saved in memory — use Export to download the updated JSON.</p>
+      <p>Edit your professional profile — changes are preview-only until you export</p>
     </div>
-    <form id="profileForm" class="module-form"></form>
-    <div class="form-actions">
-      <button type="button" class="btn btn-preview" id="previewBtn" disabled>
-        <i class="fa-solid fa-eye"></i> Preview
-      </button>
-      <button type="button" class="btn btn-export" id="exportBtn" disabled>
-        <i class="fa-solid fa-download"></i> Export JSON
-      </button>
-      <button type="button" class="btn btn-github" id="githubBtn">
-        <i class="fa-brands fa-github"></i> Open on GitHub
-      </button>
+    <div class="content-card">
+      <div class="content-card-header">
+        <h3><i class="fa-solid fa-pen-to-square" style="margin-right:8px;color:var(--primary);"></i> Edit Profile</h3>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-secondary btn-sm" id="previewBtn" disabled><i class="fa-solid fa-eye"></i> Preview</button>
+          <button class="btn btn-primary btn-sm" id="exportBtn" disabled><i class="fa-solid fa-download"></i> Export</button>
+          <button class="btn btn-ghost btn-sm" id="githubBtn"><i class="fa-brands fa-github"></i> GitHub</button>
+        </div>
+      </div>
+      <div class="content-card-body">
+        <form id="profileForm"></form>
+      </div>
     </div>
-    <div id="previewArea" class="preview-area" style="display:none"></div>
   `;
 
   const form = document.getElementById('profileForm')!;
   const previewBtn = document.getElementById('previewBtn') as HTMLButtonElement;
   const exportBtn = document.getElementById('exportBtn') as HTMLButtonElement;
   const githubBtn = document.getElementById('githubBtn')!;
-  const previewArea = document.getElementById('previewArea')!;
 
   fetchJson<Profile>('data/profile.json').then(profile => {
     currentData = { ...profile };
@@ -278,31 +297,31 @@ export function renderProfileEditor(container: HTMLElement): void {
 
     fields.forEach(f => form.appendChild(createFieldGroup(f)));
 
-    const socialSection = document.createElement('div');
-    socialSection.className = 'form-section';
-    socialSection.innerHTML = '<h3>Social Links</h3>';
-    form.appendChild(socialSection);
+    /* social links */
+    const socialGroup = document.createElement('div');
+    socialGroup.style.cssText = 'margin-top:20px;border-top:1px solid var(--border-light);padding-top:16px;';
+    const socialLabel = document.createElement('label');
+    socialLabel.style.cssText = 'font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:block;';
+    socialLabel.textContent = 'SOCIAL LINKS';
+    socialGroup.appendChild(socialLabel);
 
     profile.social.forEach((s, i) => {
-      const card = document.createElement('div');
-      card.className = 'social-card';
-      card.innerHTML = `
-        <div class="social-card-header">
-          <i class="${s.icon}"></i>
-          <span>${s.label}</span>
-        </div>
-        <input type="text" class="form-input" id="social_${i}_url" value="${s.url}" placeholder="${s.label} URL" />
-        <input type="hidden" id="social_${i}_platform" value="${s.platform}" />
-        <input type="hidden" id="social_${i}_label" value="${s.label}" />
-        <input type="hidden" id="social_${i}_icon" value="${s.icon}" />
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';
+      row.innerHTML = `
+        <span style="width:24px;text-align:center;color:var(--text-muted);font-size:0.85rem;"><i class="${s.icon}"></i></span>
+        <span style="width:60px;font-size:0.8rem;color:var(--text-secondary);">${s.label}</span>
+        <input type="text" class="form-input" id="social_${i}_url" value="${s.url}" style="flex:1;" />
       `;
-      form.appendChild(card);
+      socialGroup.appendChild(row);
     });
+    form.appendChild(socialGroup);
 
-    const interestsSection = document.createElement('div');
-    interestsSection.className = 'form-section';
-    interestsSection.innerHTML = '<h3>Interests / About</h3>';
-    form.appendChild(interestsSection);
+    /* interests */
+    const interestGroup = document.createElement('div');
+    interestGroup.style.cssText = 'margin-top:16px;border-top:1px solid var(--border-light);padding-top:16px;';
+    interestGroup.innerHTML = '<label style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:block;">INTERESTS / ABOUT</label>';
+    form.appendChild(interestGroup);
 
     form.appendChild(createFieldGroup({
       id: 'interests_p1', label: 'Interest Paragraph 1', value: profile.interests.p1, multiline: true, rows: 3
@@ -345,28 +364,26 @@ export function renderProfileEditor(container: HTMLElement): void {
   previewBtn.addEventListener('click', () => {
     const data = collectFormData();
     if (!data) return;
-    previewArea.style.display = 'block';
-    previewArea.innerHTML = `
-      <h4>Profile Preview</h4>
-      <div class="preview-card">
-        <div class="preview-field"><strong>Name:</strong> ${data.name}</div>
-        <div class="preview-field"><strong>Title:</strong> ${data.title}</div>
-        <div class="preview-field"><strong>Tagline:</strong> ${data.tagline}</div>
-        <div class="preview-field"><strong>Email:</strong> ${data.email}</div>
-        <div class="preview-field"><strong>Phone:</strong> ${data.phone}</div>
-        <div class="preview-field"><strong>Location:</strong> ${data.location}</div>
-        <div class="preview-field"><strong>Summary:</strong> ${data.summary}</div>
-        <div class="preview-field"><strong>Social:</strong> ${data.social.map(s => `<a href="${s.url}" target="_blank">${s.label}</a>`).join(', ')}</div>
+    const body = `
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div><strong>Name:</strong> ${data.name}</div>
+        <div><strong>Title:</strong> ${data.title}</div>
+        <div><strong>Tagline:</strong> ${data.tagline}</div>
+        <div><strong>Email:</strong> ${data.email}</div>
+        <div><strong>Phone:</strong> ${data.phone}</div>
+        <div><strong>Location:</strong> ${data.location}</div>
+        <div><strong>Summary:</strong> ${data.summary}</div>
+        <div><strong>Social:</strong> ${data.social.map(s => `<a href="${s.url}" target="_blank" style="color:var(--primary);">${s.label}</a>`).join(', ')}</div>
       </div>
     `;
-    previewArea.scrollIntoView({ behavior: 'smooth' });
+    openModal('Profile Preview', body);
   });
 
   exportBtn.addEventListener('click', () => {
     const data = collectFormData();
     if (!data) return;
     exportJson(data, 'profile.json');
-    showToast('profile.json downloaded — commit it to update your live site');
+    showToast('profile.json exported — commit it to your repo to update the live site');
   });
 
   githubBtn.addEventListener('click', () => {
