@@ -325,6 +325,7 @@ export function renderProfile(container: HTMLElement): void {
       <div class="content-card-header">
         <h3><i class="fa-solid fa-pen-to-square" style="margin-right:8px;color:var(--primary);"></i> Edit Profile</h3>
         <div style="display:flex;gap:6px;">
+          <a href="${modGithubUrl('profile.json')}" target="_blank" class="btn btn-ghost btn-sm" title="View on GitHub"><i class="fa-brands fa-github"></i></a>
           <button class="btn btn-secondary btn-sm" id="previewBtn" disabled><i class="fa-solid fa-eye"></i> Preview</button>
           <button class="btn btn-primary btn-sm" id="exportBtn" disabled><i class="fa-solid fa-download"></i> Export</button>
           <button class="btn btn-ghost btn-sm" id="publishBtn" disabled><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
@@ -466,9 +467,15 @@ function modCardHeader(icon: string, label: string): string {
   return `<h3><i class="fa-solid ${icon}" style="margin-right:8px;color:var(--primary);"></i> ${label}</h3>`;
 }
 
-function modHeaderActions(addLabel: string): string {
+function modGithubUrl(file: string): string {
+  return `https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/${file}`;
+}
+
+function modHeaderActions(addLabel: string, ghFile?: string): string {
+  const gh = ghFile ? `<a href="${modGithubUrl(ghFile)}" target="_blank" class="btn btn-ghost btn-sm" title="View on GitHub"><i class="fa-brands fa-github"></i></a>` : '';
   return `
     <div style="display:flex;gap:6px;">
+      ${gh}
       <button class="btn btn-primary btn-sm" id="addBtn"><i class="fa-solid fa-plus"></i> ${addLabel}</button>
       <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
       <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
@@ -531,7 +538,7 @@ export function renderExperience(container: HTMLElement): void {
     <div class="content-card">
       <div class="content-card-header">
         ${modCardHeader('fa-briefcase', 'Experience')}
-        ${modHeaderActions('Add Entry')}
+        ${modHeaderActions('Add Entry', 'experience.json')}
       </div>
       <div class="content-card-body" id="listContainer"></div>
     </div>
@@ -638,7 +645,7 @@ export function renderProjects(container: HTMLElement): void {
     <div class="content-card">
       <div class="content-card-header">
         ${modCardHeader('fa-diagram-project', 'Projects')}
-        ${modHeaderActions('Add Project')}
+        ${modHeaderActions('Add Project', 'projects.json')}
       </div>
       <div class="content-card-body" id="listContainer"></div>
     </div>
@@ -737,7 +744,7 @@ export function renderEducation(container: HTMLElement): void {
     <div class="content-card">
       <div class="content-card-header">
         ${modCardHeader('fa-graduation-cap', 'Education')}
-        ${modHeaderActions('Add Entry')}
+        ${modHeaderActions('Add Entry', 'education.json')}
       </div>
       <div class="content-card-body" id="listContainer"></div>
     </div>
@@ -836,6 +843,7 @@ export function renderSkills(container: HTMLElement): void {
       <div class="content-card-body" id="profContainer"></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <a href="${modGithubUrl('skills.json')}" target="_blank" class="btn btn-ghost btn-sm" title="View on GitHub"><i class="fa-brands fa-github"></i></a>
       <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
       <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
     </div>
@@ -938,7 +946,7 @@ export function renderCertifications(container: HTMLElement): void {
     <div class="content-card">
       <div class="content-card-header">
         ${modCardHeader('fa-certificate', 'Certifications')}
-        ${modHeaderActions('Add Certification')}
+        ${modHeaderActions('Add Certification', 'certifications.json')}
       </div>
       <div class="content-card-body" id="listContainer"></div>
     </div>
@@ -1019,6 +1027,7 @@ export function renderSettings(container: HTMLElement): void {
       <div class="content-card-header">
         ${modCardHeader('fa-gear', 'Site Settings')}
         <div style="display:flex;gap:6px;">
+          <a href="${modGithubUrl('settings.json')}" target="_blank" class="btn btn-ghost btn-sm" title="View on GitHub"><i class="fa-brands fa-github"></i></a>
           <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
           <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
         </div>
@@ -1100,6 +1109,7 @@ export function renderContact(container: HTMLElement): void {
       <div class="content-card-header">
         ${modCardHeader('fa-envelope', 'Contact Settings')}
         <div style="display:flex;gap:6px;">
+          <a href="${modGithubUrl('contact.json')}" target="_blank" class="btn btn-ghost btn-sm" title="View on GitHub"><i class="fa-brands fa-github"></i></a>
           <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
           <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
         </div>
@@ -1189,7 +1199,7 @@ export function renderSeo(container: HTMLElement): void {
     <div class="content-card">
       <div class="content-card-header">
         ${modCardHeader('fa-magnifying-glass', 'SEO Entries')}
-        ${modHeaderActions('Add Entry')}
+        ${modHeaderActions('Add Entry', 'seo.json')}
       </div>
       <div class="content-card-body" id="listContainer"></div>
     </div>
@@ -1278,7 +1288,7 @@ export function renderArticles(container: HTMLElement): void {
     <div class="content-card">
       <div class="content-card-header">
         ${modCardHeader('fa-newspaper', 'Articles')}
-        ${modHeaderActions('Add Article')}
+        ${modHeaderActions('Add Article', 'articles.json')}
       </div>
       <div class="content-card-body" id="listContainer"></div>
     </div>
