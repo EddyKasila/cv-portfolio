@@ -2,7 +2,7 @@
   "name": "Edwin Nguli",
   "title": "Project Coordinator",
   "tagline": "Bridging technology, data, and impact in international development",
-  "summary": "Dynamic and results-oriented Project Coordinator with over 5 years of experience in coordinating impactful projects for esteemed organizations such as the World Bank Group, WFP, and Echo Mobile. Proven expertise in driving successful deployment initiatives, managing complex impact evaluation projects, and fostering collaboration with stakeholders. Adept at translating project objectives into actionable strategies, ensuring adherence to timelines, and maintaining high standards of data quality. Recognized for leadership, effective communication, and consistently achieving project milestones.",
+  "summary": "Hello, and welcome! I'm Edwin Nguli, a project and operations professional with over five years of experience helping international organizations turn complex ideas into well-executed projects. I've had the privilege of working with organizations including the World Bank Group, the World Food Programme, Echo Mobile, and the University of California, Berkeley, coordinating research, managing operations, and delivering data-driven solutions. I enjoy solving problems, improving processes, and collaborating with diverse teams to create meaningful impact. Whether supporting large-scale development initiatives, implementing technology-driven projects, or streamlining operations, I strive to combine analytical thinking with practical execution. This portfolio highlights my professional journey, selected projects, and the experience I bring to future opportunities.",
   "photo": "/assets/img/profile.jpg",
   "location": "Nairobi, Kenya",
   "address": "Nairobi · P.O BOX 58436 - 00100",
@@ -10,9 +10,24 @@
   "phone": "+254703686559",
   "resumeUrl": "/EDWIN KASILA NGULI - CV.pdf",
   "social": [
-    { "platform": "linkedin", "label": "LinkedIn", "url": "https://www.linkedin.com/in/edwinkasila", "icon": "fab fa-linkedin-in" },
-    { "platform": "github", "label": "GitHub", "url": "https://github.com/EddyKasila", "icon": "fab fa-github" },
-    { "platform": "twitter", "label": "Twitter", "url": "https://twitter.com/your-twitter-username", "icon": "fab fa-twitter" }
+    {
+      "platform": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/edwinkasila",
+      "icon": "fab fa-linkedin-in"
+    },
+    {
+      "platform": "github",
+      "label": "GitHub",
+      "url": "https://github.com/EddyKasila",
+      "icon": "fab fa-github"
+    },
+    {
+      "platform": "twitter",
+      "label": "Twitter",
+      "url": "https://twitter.com/your-twitter-username",
+      "icon": "fab fa-twitter"
+    }
   ],
   "interests": {
     "p1": "I am passionate about leveraging technology and data-driven approaches to solve complex challenges in international development, public policy, and project management. I enjoy exploring innovations in impact evaluation, mobile data collection, and research methodologies that drive evidence-based decision-making.",
