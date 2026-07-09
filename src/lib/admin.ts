@@ -60,6 +60,7 @@ class AdminApp {
 
   private renderSidebar(): void {
     this.sidebarEl.innerHTML = `
+      <div class="sidebar-brand">PortfolioOS</div>
       <div class="sidebar-group">
         ${this.modules.map(m => `
           <button class="sidebar-item${m.enabled ? '' : ' disabled'}" data-module="${m.id}" ${m.enabled ? '' : 'disabled'}>
