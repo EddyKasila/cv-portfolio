@@ -266,7 +266,7 @@ export function renderProfile(container: HTMLElement): void {
         <div style="display:flex;gap:6px;">
           <button class="btn btn-secondary btn-sm" id="previewBtn" disabled><i class="fa-solid fa-eye"></i> Preview</button>
           <button class="btn btn-primary btn-sm" id="exportBtn" disabled><i class="fa-solid fa-download"></i> Export</button>
-          <button class="btn btn-ghost btn-sm" id="githubBtn"><i class="fa-brands fa-github"></i> GitHub</button>
+          <button class="btn btn-ghost btn-sm" id="publishBtn" disabled><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
         </div>
       </div>
       <div class="content-card-body">
@@ -278,7 +278,7 @@ export function renderProfile(container: HTMLElement): void {
   const form = document.getElementById('profileForm')!;
   const previewBtn = document.getElementById('previewBtn') as HTMLButtonElement;
   const exportBtn = document.getElementById('exportBtn') as HTMLButtonElement;
-  const githubBtn = document.getElementById('githubBtn')!;
+  const publishBtn = document.getElementById('publishBtn') as HTMLButtonElement;
 
   fetchJson<Profile>('data/profile.json').then(profile => {
     currentData = { ...profile };
@@ -332,6 +332,7 @@ export function renderProfile(container: HTMLElement): void {
 
     previewBtn.disabled = false;
     exportBtn.disabled = false;
+    publishBtn.disabled = false;
   });
 
   function collectFormData(): Profile | null {
@@ -386,8 +387,10 @@ export function renderProfile(container: HTMLElement): void {
     showToast('profile.json exported — commit it to your repo to update the live site');
   });
 
-  githubBtn.addEventListener('click', () => {
-    window.open('https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/profile.json', '_blank');
+  publishBtn.addEventListener('click', () => {
+    const data = collectFormData();
+    if (!data) return;
+    saveToGithub('public/data/profile.json', JSON.stringify(data, null, 2));
   });
 }
 
@@ -406,13 +409,16 @@ function modHeaderActions(addLabel: string): string {
     <div style="display:flex;gap:6px;">
       <button class="btn btn-primary btn-sm" id="addBtn"><i class="fa-solid fa-plus"></i> ${addLabel}</button>
       <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
-      <button class="btn btn-ghost btn-sm" id="githubBtn"><i class="fa-brands fa-github"></i> GitHub</button>
+      <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
     </div>`;
 }
 
-function bindModuleActions(exportFn: () => void, githubUrl: string): void {
+function bindModuleActions(exportFn: () => void, publishFn?: () => void): void {
   document.getElementById('exportBtn')?.addEventListener('click', exportFn);
-  document.getElementById('githubBtn')?.addEventListener('click', () => window.open(githubUrl, '_blank'));
+  document.getElementById('publishBtn')?.addEventListener('click', () => {
+    if (publishFn) publishFn();
+    else showToast('Publish not configured for this module', 'error');
+  });
 }
 
 function renderItemList(items: Array<{ title: string; sub: string; meta?: string }>, editLabel = 'Edit'): string {
@@ -487,7 +493,7 @@ export function renderExperience(container: HTMLElement): void {
   bindModuleActions(() => {
     exportJson(data, 'experience.json');
     showToast('experience.json exported');
-  }, 'https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/experience.json');
+  }, () => saveToGithub('public/data/experience.json', JSON.stringify(data, null, 2)));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -590,7 +596,7 @@ export function renderProjects(container: HTMLElement): void {
   bindModuleActions(() => {
     exportJson(data, 'projects.json');
     showToast('projects.json exported');
-  }, 'https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/projects.json');
+  }, () => saveToGithub('public/data/projects.json', JSON.stringify(data, null, 2)));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -688,7 +694,7 @@ export function renderEducation(container: HTMLElement): void {
   bindModuleActions(() => {
     exportJson(data, 'education.json');
     showToast('education.json exported');
-  }, 'https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/education.json');
+  }, () => saveToGithub('public/data/education.json', JSON.stringify(data, null, 2)));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -747,7 +753,7 @@ export function renderSkills(container: HTMLElement): void {
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
-      <button class="btn btn-ghost btn-sm" id="githubBtn"><i class="fa-brands fa-github"></i> GitHub</button>
+      <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
     </div>
   `;
 
@@ -799,7 +805,11 @@ export function renderSkills(container: HTMLElement): void {
     const out = { ...data, professional: profSkills };
     exportJson(out, 'skills.json');
     showToast('skills.json exported');
-  }, 'https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/skills.json');
+  }, () => {
+    const profSkills = (document.getElementById('profSkills') as HTMLTextAreaElement).value.split('\n').map(s => s.trim()).filter(Boolean);
+    const out = { ...data, professional: profSkills };
+    saveToGithub('public/data/skills.json', JSON.stringify(out, null, 2));
+  });
 
   function openProgModal(index: number): void {
     const isNew = index < 0;
@@ -881,7 +891,7 @@ export function renderCertifications(container: HTMLElement): void {
   bindModuleActions(() => {
     exportJson(data, 'certifications.json');
     showToast('certifications.json exported');
-  }, 'https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/certifications.json');
+  }, () => saveToGithub('public/data/certifications.json', JSON.stringify(data, null, 2)));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -922,7 +932,7 @@ export function renderSettings(container: HTMLElement): void {
         ${modCardHeader('fa-gear', 'Site Settings')}
         <div style="display:flex;gap:6px;">
           <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
-          <button class="btn btn-ghost btn-sm" id="githubBtn"><i class="fa-brands fa-github"></i> GitHub</button>
+          <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
         </div>
       </div>
       <div class="content-card-body" id="formContainer"></div>
@@ -933,6 +943,7 @@ export function renderSettings(container: HTMLElement): void {
 
   fetchJson<any>('data/settings.json').then(d => {
     data = d;
+    const ghToken = getGhToken();
     formEl.innerHTML = `
       <div class="form-group"><label>Site Title</label><input class="form-input" id="f_siteTitle" value="${esc(d.siteTitle)}" /></div>
       <div class="form-group"><label>Site Description</label><textarea class="form-input" id="f_siteDescription" rows="2">${esc(d.siteDescription)}</textarea></div>
@@ -948,11 +959,28 @@ export function renderSettings(container: HTMLElement): void {
           Email notifications
         </label>
       </div>
+      <div style="margin-top:20px;border-top:1px solid var(--border-light);padding-top:16px;">
+        <label style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:block;">GITHUB INTEGRATION</label>
+        <div class="form-group">
+          <label>Personal Access Token</label>
+          <input class="form-input" id="f_ghToken" type="password" value="${esc(ghToken)}" placeholder="ghp_..." />
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+            Stored locally in browser — never saved to JSON.
+            <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary);">Create a token</a> with <code>repo</code> scope.
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="saveGhTokenBtn"><i class="fa-solid fa-floppy-disk"></i> Save Token</button>
+      </div>
     `;
+
+    document.getElementById('saveGhTokenBtn')!.addEventListener('click', () => {
+      const token = (document.getElementById('f_ghToken') as HTMLInputElement).value.trim();
+      if (token) { setGhToken(token); showToast('GitHub token saved locally'); }
+    });
   });
 
-  bindModuleActions(() => {
-    const out = {
+  function collectSettings() {
+    return {
       ...data,
       siteTitle: g('f_siteTitle'),
       siteDescription: ga('f_siteDescription'),
@@ -961,9 +989,346 @@ export function renderSettings(container: HTMLElement): void {
       showContactForm: (document.getElementById('f_showContactForm') as HTMLInputElement).checked,
       emailNotifications: (document.getElementById('f_emailNotifications') as HTMLInputElement).checked,
     };
-    exportJson(out, 'settings.json');
+  }
+
+  bindModuleActions(() => {
+    exportJson(collectSettings(), 'settings.json');
     showToast('settings.json exported');
-  }, 'https://github.com/EddyKasila/cv-portfolio/blob/master/public/data/settings.json');
+  }, () => saveToGithub('public/data/settings.json', JSON.stringify(collectSettings(), null, 2)));
+}
+
+/* ── Contact ── */
+
+export function renderContact(container: HTMLElement): void {
+  let data: any = {};
+
+  container.innerHTML = `
+    ${modPageHeader('Contact', 'Configure your contact form settings')}
+    <div class="content-card">
+      <div class="content-card-header">
+        ${modCardHeader('fa-envelope', 'Contact Settings')}
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm" id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
+          <button class="btn btn-ghost btn-sm" id="publishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
+        </div>
+      </div>
+      <div class="content-card-body" id="formContainer"></div>
+    </div>
+  `;
+
+  const formEl = document.getElementById('formContainer')!;
+
+  fetchJson<any>('data/contact.json').then(d => {
+    data = d;
+    let fieldsHtml = `
+      <div class="form-group"><label>Formspree Form ID</label><input class="form-input" id="f_formspreeId" value="${esc(d.formspreeId)}" placeholder="e.g. xvzjvbdg" /></div>
+      <div class="form-group"><label>Recipient Email</label><input class="form-input" id="f_recipientEmail" value="${esc(d.recipientEmail)}" type="email" /></div>
+      <div class="form-group"><label>Success Message</label><textarea class="form-input" id="f_successMessage" rows="2">${esc(d.successMessage)}</textarea></div>
+      <div style="margin-top:20px;border-top:1px solid var(--border-light);padding-top:16px;">
+        <label style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:block;">FORM FIELDS</label>
+    `;
+    Object.entries(d.fields).forEach(([key, fld]: [string, any]) => {
+      fieldsHtml += `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <input type="text" class="form-input" id="f_field_${key}_label" value="${esc(fld.label)}" style="flex:1;" placeholder="Label" />
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;white-space:nowrap;cursor:pointer;">
+            <input type="checkbox" id="f_field_${key}_required" ${fld.required ? 'checked' : ''} /> Required
+          </label>
+          <button class="btn btn-danger btn-sm remove-field" data-key="${key}"><i class="fa-solid fa-xmark"></i></button>
+        </div>`;
+    });
+    fieldsHtml += `
+        <button class="btn btn-secondary btn-sm" id="addFieldBtn"><i class="fa-solid fa-plus"></i> Add Field</button>
+      </div>
+    `;
+    formEl.innerHTML = fieldsHtml;
+
+    formEl.querySelectorAll('.remove-field').forEach(btn =>
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-key')!;
+        delete data.fields[key];
+        // Refresh form
+        fetchJson<any>('data/contact.json').then(original => {
+          data = original;
+          // Apply current edits
+          collectFields();
+          renderContact(container);
+        });
+      })
+    );
+
+    document.getElementById('addFieldBtn')!.addEventListener('click', () => {
+      const key = prompt('Field key (e.g. phone, company):');
+      if (!key) return;
+      data.fields[key] = { label: key.charAt(0).toUpperCase() + key.slice(1), required: false };
+      renderContact(container);
+    });
+  });
+
+  function collectFields(): void {
+    data.formspreeId = g('f_formspreeId');
+    data.recipientEmail = g('f_recipientEmail');
+    data.successMessage = ga('f_successMessage');
+    Object.keys(data.fields).forEach(key => {
+      const labelEl = document.getElementById(`f_field_${key}_label`) as HTMLInputElement;
+      const reqEl = document.getElementById(`f_field_${key}_required`) as HTMLInputElement;
+      if (labelEl) data.fields[key].label = labelEl.value;
+      if (reqEl) data.fields[key].required = reqEl.checked;
+    });
+  }
+
+  bindModuleActions(() => {
+    collectFields();
+    exportJson(data, 'contact.json');
+    showToast('contact.json exported');
+  }, () => {
+    collectFields();
+    saveToGithub('public/data/contact.json', JSON.stringify(data, null, 2));
+  });
+}
+
+/* ── SEO ── */
+
+export function renderSeo(container: HTMLElement): void {
+  let data: any[] = [];
+
+  container.innerHTML = `
+    ${modPageHeader('SEO', 'Manage meta titles and descriptions per page')}
+    <div class="content-card">
+      <div class="content-card-header">
+        ${modCardHeader('fa-magnifying-glass', 'SEO Entries')}
+        ${modHeaderActions('Add Entry')}
+      </div>
+      <div class="content-card-body" id="listContainer"></div>
+    </div>
+  `;
+
+  const listEl = document.getElementById('listContainer')!;
+
+  fetchJson<any[]>('data/seo.json').then(d => {
+    data = d;
+    renderList();
+  });
+
+  function renderList(): void {
+    listEl.innerHTML = renderItemList(data.map(e => ({
+      title: e.page,
+      sub: e.title,
+      meta: e.description,
+    })));
+    bindEvents();
+  }
+
+  function bindEvents(): void {
+    listEl.querySelectorAll('.edit-btn').forEach(btn =>
+      btn.addEventListener('click', () => openEditModal(parseInt(btn.getAttribute('data-index')!)))
+    );
+    listEl.querySelectorAll('.delete-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        data.splice(parseInt(btn.getAttribute('data-index')!), 1);
+        renderList();
+        showToast('SEO entry removed');
+      })
+    );
+  }
+
+  document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
+
+  bindModuleActions(() => {
+    exportJson(data, 'seo.json');
+    showToast('seo.json exported');
+  }, () => saveToGithub('public/data/seo.json', JSON.stringify(data, null, 2)));
+
+  function openEditModal(index: number): void {
+    const isNew = index < 0;
+    const item = isNew ? { page: '', title: '', description: '', ogImage: '' } : { ...data[index] };
+
+    const fieldsHtml = `
+      <div class="form-group"><label>Page *</label>
+        <select class="form-input" id="f_page">
+          ${['home','resume','projects','contact','about'].map(p =>
+            `<option value="${p}"${item.page === p ? ' selected' : ''}>${p.charAt(0).toUpperCase() + p.slice(1)}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label>Meta Title *</label><input class="form-input" id="f_title" value="${esc(item.title)}" /></div>
+      <div class="form-group"><label>Meta Description</label><textarea class="form-input" id="f_description" rows="3">${esc(item.description)}</textarea></div>
+      <div class="form-group"><label>OG Image URL</label><input class="form-input" id="f_ogImage" value="${esc(item.ogImage || '')}" placeholder="Relative or absolute URL" /></div>
+    `;
+
+    openModal(isNew ? 'Add SEO Entry' : 'Edit SEO Entry', fieldsHtml, modalFooter(isNew));
+    document.getElementById('modalCancelBtn')!.addEventListener('click', closeModal);
+    document.getElementById('modalSaveBtn')!.addEventListener('click', () => {
+      const title = (document.getElementById('f_title') as HTMLInputElement).value.trim();
+      if (!title) { showToast('Meta title is required', 'error'); return; }
+      const updated = {
+        page: (document.getElementById('f_page') as HTMLSelectElement).value,
+        title,
+        description: ga('f_description'),
+        ogImage: g('f_ogImage'),
+      };
+      if (isNew) { data.push(updated); } else { data[index] = updated; }
+      renderList();
+      closeModal();
+      showToast(isNew ? 'SEO entry added' : 'SEO entry saved');
+    });
+  }
+}
+
+/* ── Articles ── */
+
+export function renderArticles(container: HTMLElement): void {
+  let data: any[] = [];
+
+  container.innerHTML = `
+    ${modPageHeader('Articles', 'Manage your articles and blog posts')}
+    <div class="content-card">
+      <div class="content-card-header">
+        ${modCardHeader('fa-newspaper', 'Articles')}
+        ${modHeaderActions('Add Article')}
+      </div>
+      <div class="content-card-body" id="listContainer"></div>
+    </div>
+  `;
+
+  const listEl = document.getElementById('listContainer')!;
+
+  fetchJson<any[]>('data/articles.json').then(d => {
+    data = d;
+    renderList();
+  });
+
+  function renderList(): void {
+    listEl.innerHTML = renderItemList(data.map(a => ({
+      title: a.title,
+      sub: a.slug ? `/${a.slug}` : '—',
+      meta: `${a.published || 'Draft'} · ${(a.tags || []).join(', ')}`,
+    })));
+    bindEvents();
+  }
+
+  function bindEvents(): void {
+    listEl.querySelectorAll('.edit-btn').forEach(btn =>
+      btn.addEventListener('click', () => openEditModal(parseInt(btn.getAttribute('data-index')!)))
+    );
+    listEl.querySelectorAll('.delete-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        data.splice(parseInt(btn.getAttribute('data-index')!), 1);
+        renderList();
+        showToast('Article removed');
+      })
+    );
+  }
+
+  document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
+
+  bindModuleActions(() => {
+    exportJson(data, 'articles.json');
+    showToast('articles.json exported');
+  }, () => saveToGithub('public/data/articles.json', JSON.stringify(data, null, 2)));
+
+  function openEditModal(index: number): void {
+    const isNew = index < 0;
+    const item = isNew ? { title: '', slug: '', excerpt: '', content: '', published: '', tags: [] } : { ...data[index] };
+
+    const fieldsHtml = `
+      <div class="form-group"><label>Title *</label><input class="form-input" id="f_title" value="${esc(item.title)}" /></div>
+      <div class="form-group"><label>Slug</label><input class="form-input" id="f_slug" value="${esc(item.slug)}" placeholder="e.g. my-article-slug" /></div>
+      <div class="form-group"><label>Published Date</label><input class="form-input" id="f_published" value="${esc(item.published || '')}" type="date" /></div>
+      <div class="form-group"><label>Tags (comma-separated)</label><input class="form-input" id="f_tags" value="${esc((item.tags || []).join(', '))}" placeholder="e.g. project, career, tech" /></div>
+      <div class="form-group"><label>Excerpt</label><textarea class="form-input" id="f_excerpt" rows="3">${esc(item.excerpt)}</textarea></div>
+      <div class="form-group"><label>Content (Markdown)</label><textarea class="form-input" id="f_content" rows="10">${esc(item.content)}</textarea></div>
+    `;
+
+    openModal(isNew ? 'Add Article' : 'Edit Article', fieldsHtml, modalFooter(isNew));
+    document.getElementById('modalCancelBtn')!.addEventListener('click', closeModal);
+    document.getElementById('modalSaveBtn')!.addEventListener('click', () => {
+      const title = (document.getElementById('f_title') as HTMLInputElement).value.trim();
+      if (!title) { showToast('Title is required', 'error'); return; }
+      const tagsStr = (document.getElementById('f_tags') as HTMLInputElement).value;
+      const updated = {
+        title,
+        slug: g('f_slug'),
+        excerpt: ga('f_excerpt'),
+        content: ga('f_content'),
+        published: g('f_published'),
+        tags: tagsStr.split(',').map(s => s.trim()).filter(Boolean),
+      };
+      if (isNew) { data.push(updated); } else { data[index] = updated; }
+      renderList();
+      closeModal();
+      showToast(isNew ? 'Article added' : 'Article saved');
+    });
+  }
+}
+
+/* ── GitHub Save (Phase 7) ── */
+
+const GH_STORAGE_KEY = 'portfolioos_gh_token';
+
+function getGhToken(): string {
+  return localStorage.getItem(GH_STORAGE_KEY) || '';
+}
+
+function setGhToken(token: string): void {
+  localStorage.setItem(GH_STORAGE_KEY, token);
+}
+
+export async function saveToGithub(path: string, content: string, message?: string): Promise<void> {
+  const token = getGhToken();
+  if (!token) {
+    showToast('GitHub token not configured — set one in Settings', 'error');
+    return;
+  }
+
+  const owner = 'EddyKasila';
+  const repo = 'cv-portfolio';
+  const branch = 'master';
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const base64Content = btoa(unescape(encodeURIComponent(content)));
+  const commitMessage = message || `Update ${path} from PortfolioOS admin`;
+
+  try {
+    // Get current file SHA if it exists
+    let sha: string | undefined;
+    try {
+      const getRes = await fetch(`${apiUrl}?ref=${branch}`, {
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+      });
+      if (getRes.ok) {
+        const existing = await getRes.json();
+        sha = existing.sha;
+      }
+    } catch {
+      // File may not exist yet
+    }
+
+    const body: any = {
+      message: commitMessage,
+      content: base64Content,
+      branch,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || `GitHub API returned ${res.status}`);
+    }
+
+    showToast(`Saved to GitHub: ${path}`);
+  } catch (err: any) {
+    showToast(`GitHub save failed: ${err.message}`, 'error');
+  }
 }
 
 /* ── Small helpers ── */

@@ -101,6 +101,13 @@ export interface Settings {
   emailNotifications: boolean;
 }
 
+export interface SeoEntry {
+  page: string;
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
 export type ContentType = keyof ContentMap;
 
 export interface ContentMap {
@@ -113,4 +120,5 @@ export interface ContentMap {
   articles: Article[];
   contact: Contact;
   settings: Settings;
+  seo: SeoEntry[];
 }
