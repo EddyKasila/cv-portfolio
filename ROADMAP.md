@@ -66,22 +66,22 @@ src/
 - Skills taxonomy editor
 - `education.json` and `skills.json` management
 
-### Phase 5 — Contact & SEO
-- Contact message viewer (read-only from form responses)
+### Phase 5 — Contact & SEO ✅
+- Contact settings editor (Formspree ID, fields, labels, required)
 - SEO metadata editor per page
-- Site settings panel
-- `contact.json` and `settings.json` management
+- Site settings panel (including GitHub token config)
+- `contact.json`, `seo.json`, and `settings.json` management
 
-### Phase 6 — Articles / Blog
-- Markdown-based article editor
-- Tagging and categorization
-- RSS feed generation
+### Phase 6 — Articles / Blog ✅
+- Admin CRUD for articles
+- Markdown content field
+- Tags, slug, published date
 - `articles.json` management
 
-### Phase 7 — GitHub API Save
-- Direct "Save to GitHub" from admin dashboard using PAT
-- Commit message generation
-- Branch selection (main/staging)
+### Phase 7 — GitHub API Save ✅
+- Direct "Publish to GitHub" from admin dashboard using PAT
+- Token configured in Settings (stored in localStorage)
+- Available on every module (Profile, Experience, Projects, etc.)
 
 ## Future Enhancements
 
