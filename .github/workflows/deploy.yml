@@ -8,6 +8,9 @@ on:
     branches: [ master ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
 permissions:
   contents: write
   pages: write

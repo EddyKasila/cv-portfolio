@@ -1,6 +1,7 @@
 import type { Profile } from '@/types';
 
 const STORAGE_KEY = 'portfolioos_auth';
+const ACTIVITY_KEY = 'portfolioos_activity';
 
 export interface AdminModule {
   id: string;
@@ -9,6 +10,13 @@ export interface AdminModule {
   enabled: boolean;
   render?: (container: HTMLElement) => void;
   destroy?: () => void;
+}
+
+interface ActivityEvent {
+  type: 'edit' | 'publish' | 'export' | 'view';
+  module: string;
+  desc: string;
+  time: number;
 }
 
 class AdminApp {
@@ -84,6 +92,10 @@ class AdminApp {
 
     this.contentEl.innerHTML = '';
     mod.render(this.contentEl);
+
+    if (moduleId !== 'dashboard') {
+      logActivity('view', moduleId, `Viewed ${mod.label}`);
+    }
   }
 }
 
@@ -118,7 +130,7 @@ function showToast(message: string, type: 'success' | 'error' = 'success'): void
   const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
   el.innerHTML = `<i class="fa-solid ${icon}"></i> ${message}`;
   requestAnimationFrame(() => el.classList.add('show'));
-  setTimeout(() => el.classList.remove('show'), 3000);
+  setTimeout(() => el.classList.remove('show'), 3500);
 }
 
 function openModal(title: string, body: string, footer?: string): void {
@@ -190,6 +202,58 @@ function createFieldGroup(config: {
   return group;
 }
 
+/* ── Activity Tracking ── */
+
+function getActivity(): ActivityEvent[] {
+  try {
+    return JSON.parse(localStorage.getItem(ACTIVITY_KEY) || '[]');
+  } catch { return []; }
+}
+
+function logActivity(type: ActivityEvent['type'], module: string, desc: string): void {
+  const events = getActivity();
+  const modLabel = getModuleLabel(module);
+  events.unshift({ type, module, desc: desc || `${type} ${modLabel}`, time: Date.now() });
+  if (events.length > 50) events.length = 50;
+  localStorage.setItem(ACTIVITY_KEY, JSON.stringify(events));
+}
+
+function getModuleLabel(id: string): string {
+  const labels: Record<string, string> = {
+    dashboard: 'Dashboard', profile: 'Profile', experience: 'Experience',
+    projects: 'Projects', education: 'Education', skills: 'Skills',
+    certifications: 'Certifications', settings: 'Settings', contact: 'Contact',
+    seo: 'SEO', articles: 'Articles',
+  };
+  return labels[id] || id;
+}
+
+function renderActivityList(events: ActivityEvent[]): string {
+  if (events.length === 0) return `<div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i><h3>No activity yet</h3><p>Your actions will appear here</p></div>`;
+
+  const timeAgo = (ts: number): string => {
+    const diff = Date.now() - ts;
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  };
+
+  return `<ul class="activity-list">${events.map(e => `
+    <li class="activity-item">
+      <div class="activity-dot ${e.type}"></div>
+      <div class="activity-content">
+        <div class="activity-title">${esc(e.desc)}</div>
+        <div class="activity-desc">${getModuleLabel(e.module)}</div>
+        <div class="activity-time">${timeAgo(e.time)}</div>
+      </div>
+    </li>
+  `).join('')}</ul>`;
+}
+
 /* ── Dashboard ── */
 
 export function renderDashboard(container: HTMLElement): void {
@@ -200,25 +264,25 @@ export function renderDashboard(container: HTMLElement): void {
     </div>
     <div class="stats-grid">
       <div class="stat-card animate-in">
-        <div class="stat-icon" style="background:#eff6ff;color:#2563eb;"><i class="fa-solid fa-user"></i></div>
+        <div class="stat-icon" style="background:#eef2ff;color:#6366f1;"><i class="fa-solid fa-user"></i></div>
         <div class="stat-value" id="statProfile">—</div>
         <div class="stat-label">Profile</div>
         <div class="stat-desc">Your identity & social links</div>
       </div>
       <div class="stat-card animate-in" style="animation-delay:0.05s">
-        <div class="stat-icon" style="background:#f0fdf4;color:#059669;"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="stat-icon" style="background:#ecfdf5;color:#10b981;"><i class="fa-solid fa-briefcase"></i></div>
         <div class="stat-value" id="statExperience">—</div>
         <div class="stat-label">Experience</div>
         <div class="stat-desc">Work history entries</div>
       </div>
       <div class="stat-card animate-in" style="animation-delay:0.1s">
-        <div class="stat-icon" style="background:#fef2f2;color:#dc2626;"><i class="fa-solid fa-diagram-project"></i></div>
+        <div class="stat-icon" style="background:#fef2f2;color:#ef4444;"><i class="fa-solid fa-diagram-project"></i></div>
         <div class="stat-value" id="statProjects">—</div>
         <div class="stat-label">Projects</div>
         <div class="stat-desc">Portfolio projects</div>
       </div>
       <div class="stat-card animate-in" style="animation-delay:0.15s">
-        <div class="stat-icon" style="background:#faf5ff;color:#9333ea;"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="stat-icon" style="background:#faf5ff;color:#a855f7;"><i class="fa-solid fa-graduation-cap"></i></div>
         <div class="stat-value" id="statEducation">—</div>
         <div class="stat-label">Education</div>
         <div class="stat-desc">Degrees & certifications</div>
@@ -228,11 +292,8 @@ export function renderDashboard(container: HTMLElement): void {
       <div class="content-card-header">
         <h3><i class="fa-solid fa-clock-rotate-left" style="margin-right:8px;color:var(--text-muted);"></i> Recent Activity</h3>
       </div>
-      <div class="content-card-body">
-        <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:0.9rem;">
-          <i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>
-          Content activity tracking coming soon
-        </div>
+      <div class="content-card-body" id="activityContainer">
+        ${renderActivityList(getActivity())}
       </div>
     </div>
   `;
@@ -384,13 +445,14 @@ export function renderProfile(container: HTMLElement): void {
     const data = collectFormData();
     if (!data) return;
     exportJson(data, 'profile.json');
+    logActivity('export', 'profile', 'Exported profile.json');
     showToast('profile.json exported — commit it to your repo to update the live site');
   });
 
   publishBtn.addEventListener('click', () => {
     const data = collectFormData();
     if (!data) return;
-    saveToGithub('public/data/profile.json', JSON.stringify(data, null, 2));
+    confirmPublish('profile', () => saveToGithub('public/data/profile.json', JSON.stringify(data, null, 2), 'Update profile from PortfolioOS'));
   });
 }
 
@@ -413,11 +475,30 @@ function modHeaderActions(addLabel: string): string {
     </div>`;
 }
 
-function bindModuleActions(exportFn: () => void, publishFn?: () => void): void {
-  document.getElementById('exportBtn')?.addEventListener('click', exportFn);
+function bindModuleActions(moduleId: string, exportFn: () => void, publishFn?: () => void): void {
+  document.getElementById('exportBtn')?.addEventListener('click', () => {
+    exportFn();
+    logActivity('export', moduleId, `Exported ${moduleId}.json`);
+  });
   document.getElementById('publishBtn')?.addEventListener('click', () => {
-    if (publishFn) publishFn();
-    else showToast('Publish not configured for this module', 'error');
+    if (publishFn) {
+      confirmPublish(moduleId, publishFn);
+    } else showToast('Publish not configured for this module', 'error');
+  });
+}
+
+function confirmPublish(moduleId: string, publishFn: () => void): void {
+  openModal(
+    'Confirm Publish',
+    `<p style="color:var(--text-secondary);line-height:1.6;">This will commit your changes directly to the <strong>master</strong> branch on GitHub. A new deploy will be triggered automatically.</p>
+     <p style="margin-top:12px;font-size:0.85rem;color:var(--text-muted);">Make sure you have configured your GitHub token in <strong>Settings → GitHub Integration</strong>.</p>`,
+    `<button class="btn btn-secondary" id="modalCancelBtn">Cancel</button>
+     <button class="btn btn-primary" id="confirmPublishBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish Now</button>`
+  );
+  document.getElementById('modalCancelBtn')!.addEventListener('click', closeModal);
+  document.getElementById('confirmPublishBtn')!.addEventListener('click', () => {
+    closeModal();
+    publishFn();
   });
 }
 
@@ -490,10 +571,10 @@ export function renderExperience(container: HTMLElement): void {
     openEditModal(-1);
   });
 
-  bindModuleActions(() => {
+  bindModuleActions('experience', () => {
     exportJson(data, 'experience.json');
     showToast('experience.json exported');
-  }, () => saveToGithub('public/data/experience.json', JSON.stringify(data, null, 2)));
+  }, () => saveToGithub('public/data/experience.json', JSON.stringify(data, null, 2), 'Update experience from PortfolioOS'));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -541,6 +622,7 @@ export function renderExperience(container: HTMLElement): void {
       }
       renderList();
       closeModal();
+      logActivity('edit', 'experience', isNew ? `Added "${updated.role}"` : `Edited "${updated.role}"`);
       showToast(isNew ? 'Entry added' : 'Entry saved');
     });
   }
@@ -593,10 +675,10 @@ export function renderProjects(container: HTMLElement): void {
 
   document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
 
-  bindModuleActions(() => {
+  bindModuleActions('projects', () => {
     exportJson(data, 'projects.json');
     showToast('projects.json exported');
-  }, () => saveToGithub('public/data/projects.json', JSON.stringify(data, null, 2)));
+  }, () => saveToGithub('public/data/projects.json', JSON.stringify(data, null, 2), 'Update projects from PortfolioOS'));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -639,6 +721,7 @@ export function renderProjects(container: HTMLElement): void {
       if (isNew) { data.push(updated); } else { data[index] = updated; }
       renderList();
       closeModal();
+      logActivity('edit', 'projects', isNew ? `Added "${updated.name}"` : `Edited "${updated.name}"`);
       showToast(isNew ? 'Project added' : 'Project saved');
     });
   }
@@ -691,10 +774,10 @@ export function renderEducation(container: HTMLElement): void {
 
   document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
 
-  bindModuleActions(() => {
+  bindModuleActions('education', () => {
     exportJson(data, 'education.json');
     showToast('education.json exported');
-  }, () => saveToGithub('public/data/education.json', JSON.stringify(data, null, 2)));
+  }, () => saveToGithub('public/data/education.json', JSON.stringify(data, null, 2), 'Update education from PortfolioOS'));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -724,6 +807,7 @@ export function renderEducation(container: HTMLElement): void {
       if (isNew) { data.push(updated); } else { data[index] = updated; }
       renderList();
       closeModal();
+      logActivity('edit', 'education', isNew ? `Added "${updated.degree}"` : `Edited "${updated.degree}"`);
       showToast(isNew ? 'Entry added' : 'Entry saved');
     });
   }
@@ -800,15 +884,17 @@ export function renderSkills(container: HTMLElement): void {
 
   document.getElementById('addProgBtn')!.addEventListener('click', () => openProgModal(-1));
 
-  bindModuleActions(() => {
+  document.getElementById('exportBtn')!.addEventListener('click', () => {
     const profSkills = (document.getElementById('profSkills') as HTMLTextAreaElement).value.split('\n').map(s => s.trim()).filter(Boolean);
     const out = { ...data, professional: profSkills };
     exportJson(out, 'skills.json');
+    logActivity('export', 'skills', 'Exported skills.json');
     showToast('skills.json exported');
-  }, () => {
+  });
+  document.getElementById('publishBtn')!.addEventListener('click', () => {
     const profSkills = (document.getElementById('profSkills') as HTMLTextAreaElement).value.split('\n').map(s => s.trim()).filter(Boolean);
     const out = { ...data, professional: profSkills };
-    saveToGithub('public/data/skills.json', JSON.stringify(out, null, 2));
+    confirmPublish('skills', () => saveToGithub('public/data/skills.json', JSON.stringify(out, null, 2), 'Update skills from PortfolioOS'));
   });
 
   function openProgModal(index: number): void {
@@ -836,6 +922,7 @@ export function renderSkills(container: HTMLElement): void {
       if (isNew) { data.programming.push(updated); } else { data.programming[index] = updated; }
       renderAll();
       closeModal();
+      logActivity('edit', 'skills', isNew ? `Added skill "${updated.name}"` : `Edited skill "${updated.name}"`);
       showToast(isNew ? 'Skill added' : 'Skill saved');
     });
   }
@@ -888,10 +975,10 @@ export function renderCertifications(container: HTMLElement): void {
 
   document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
 
-  bindModuleActions(() => {
+  bindModuleActions('certifications', () => {
     exportJson(data, 'certifications.json');
     showToast('certifications.json exported');
-  }, () => saveToGithub('public/data/certifications.json', JSON.stringify(data, null, 2)));
+  }, () => saveToGithub('public/data/certifications.json', JSON.stringify(data, null, 2), 'Update certifications from PortfolioOS'));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -915,6 +1002,7 @@ export function renderCertifications(container: HTMLElement): void {
       if (isNew) { data.push(updated); } else { data[index] = updated; }
       renderList();
       closeModal();
+      logActivity('edit', 'certifications', isNew ? `Added "${updated.name}"` : `Edited "${updated.name}"`);
       showToast(isNew ? 'Certification added' : 'Certification saved');
     });
   }
@@ -991,10 +1079,14 @@ export function renderSettings(container: HTMLElement): void {
     };
   }
 
-  bindModuleActions(() => {
+  document.getElementById('exportBtn')!.addEventListener('click', () => {
     exportJson(collectSettings(), 'settings.json');
+    logActivity('export', 'settings', 'Exported settings.json');
     showToast('settings.json exported');
-  }, () => saveToGithub('public/data/settings.json', JSON.stringify(collectSettings(), null, 2)));
+  });
+  document.getElementById('publishBtn')!.addEventListener('click', () => {
+    confirmPublish('settings', () => saveToGithub('public/data/settings.json', JSON.stringify(collectSettings(), null, 2), 'Update settings from PortfolioOS'));
+  });
 }
 
 /* ── Contact ── */
@@ -1047,10 +1139,8 @@ export function renderContact(container: HTMLElement): void {
       btn.addEventListener('click', () => {
         const key = btn.getAttribute('data-key')!;
         delete data.fields[key];
-        // Refresh form
         fetchJson<any>('data/contact.json').then(original => {
           data = original;
-          // Apply current edits
           collectFields();
           renderContact(container);
         });
@@ -1077,13 +1167,15 @@ export function renderContact(container: HTMLElement): void {
     });
   }
 
-  bindModuleActions(() => {
+  document.getElementById('exportBtn')!.addEventListener('click', () => {
     collectFields();
     exportJson(data, 'contact.json');
+    logActivity('export', 'contact', 'Exported contact.json');
     showToast('contact.json exported');
-  }, () => {
+  });
+  document.getElementById('publishBtn')!.addEventListener('click', () => {
     collectFields();
-    saveToGithub('public/data/contact.json', JSON.stringify(data, null, 2));
+    confirmPublish('contact', () => saveToGithub('public/data/contact.json', JSON.stringify(data, null, 2), 'Update contact from PortfolioOS'));
   });
 }
 
@@ -1134,10 +1226,10 @@ export function renderSeo(container: HTMLElement): void {
 
   document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
 
-  bindModuleActions(() => {
+  bindModuleActions('seo', () => {
     exportJson(data, 'seo.json');
     showToast('seo.json exported');
-  }, () => saveToGithub('public/data/seo.json', JSON.stringify(data, null, 2)));
+  }, () => saveToGithub('public/data/seo.json', JSON.stringify(data, null, 2), 'Update SEO from PortfolioOS'));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -1170,6 +1262,7 @@ export function renderSeo(container: HTMLElement): void {
       if (isNew) { data.push(updated); } else { data[index] = updated; }
       renderList();
       closeModal();
+      logActivity('edit', 'seo', isNew ? `Added SEO for "${updated.page}"` : `Edited SEO for "${updated.page}"`);
       showToast(isNew ? 'SEO entry added' : 'SEO entry saved');
     });
   }
@@ -1222,10 +1315,10 @@ export function renderArticles(container: HTMLElement): void {
 
   document.getElementById('addBtn')!.addEventListener('click', () => openEditModal(-1));
 
-  bindModuleActions(() => {
+  bindModuleActions('articles', () => {
     exportJson(data, 'articles.json');
     showToast('articles.json exported');
-  }, () => saveToGithub('public/data/articles.json', JSON.stringify(data, null, 2)));
+  }, () => saveToGithub('public/data/articles.json', JSON.stringify(data, null, 2), 'Update articles from PortfolioOS'));
 
   function openEditModal(index: number): void {
     const isNew = index < 0;
@@ -1257,6 +1350,7 @@ export function renderArticles(container: HTMLElement): void {
       if (isNew) { data.push(updated); } else { data[index] = updated; }
       renderList();
       closeModal();
+      logActivity('edit', 'articles', isNew ? `Added article "${updated.title}"` : `Edited article "${updated.title}"`);
       showToast(isNew ? 'Article added' : 'Article saved');
     });
   }
@@ -1288,8 +1382,10 @@ export async function saveToGithub(path: string, content: string, message?: stri
   const base64Content = btoa(unescape(encodeURIComponent(content)));
   const commitMessage = message || `Update ${path} from PortfolioOS admin`;
 
+  // Show saving indicator
+  showToast('Saving to GitHub...', 'success');
+
   try {
-    // Get current file SHA if it exists
     let sha: string | undefined;
     try {
       const getRes = await fetch(`${apiUrl}?ref=${branch}`, {
@@ -1300,7 +1396,7 @@ export async function saveToGithub(path: string, content: string, message?: stri
         sha = existing.sha;
       }
     } catch {
-      // File may not exist yet
+      // File may not exist
     }
 
     const body: any = {
@@ -1325,9 +1421,13 @@ export async function saveToGithub(path: string, content: string, message?: stri
       throw new Error(err.message || `GitHub API returned ${res.status}`);
     }
 
-    showToast(`Saved to GitHub: ${path}`);
+    // Log the publish activity
+    const moduleId = path.replace('public/data/', '').replace('.json', '');
+    logActivity('publish', moduleId, `Published ${path} to GitHub`);
+
+    showToast(`Published to GitHub: ${path}`);
   } catch (err: any) {
-    showToast(`GitHub save failed: ${err.message}`, 'error');
+    showToast(`GitHub publish failed: ${err.message}`, 'error');
   }
 }
 
@@ -1351,5 +1451,3 @@ function modalFooter(isNew: boolean): string {
     <button class="btn btn-primary" id="modalSaveBtn">${isNew ? 'Add' : 'Save'}</button>
   `;
 }
-
-
