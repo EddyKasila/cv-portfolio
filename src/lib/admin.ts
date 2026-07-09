@@ -60,7 +60,6 @@ class AdminApp {
 
   private renderSidebar(): void {
     this.sidebarEl.innerHTML = `
-      <div class="sidebar-brand">PortfolioOS</div>
       <div class="sidebar-group">
         ${this.modules.map(m => `
           <button class="sidebar-item${m.enabled ? '' : ' disabled'}" data-module="${m.id}" ${m.enabled ? '' : 'disabled'}>
@@ -263,38 +262,55 @@ export function renderDashboard(container: HTMLElement): void {
       <h2>Dashboard</h2>
       <p>Overview of your PortfolioOS content</p>
     </div>
-    <div class="stats-grid">
-      <div class="stat-card animate-in">
-        <div class="stat-icon" style="background:#eef2ff;color:#6366f1;"><i class="fa-solid fa-user"></i></div>
-        <div class="stat-value" id="statProfile">—</div>
-        <div class="stat-label">Profile</div>
-        <div class="stat-desc">Your identity & social links</div>
+
+    <div class="dash-section">
+      <div class="dash-section-header">
+        <i class="fa-solid fa-chart-simple"></i> Content Overview
       </div>
-      <div class="stat-card animate-in" style="animation-delay:0.05s">
-        <div class="stat-icon" style="background:#ecfdf5;color:#10b981;"><i class="fa-solid fa-briefcase"></i></div>
-        <div class="stat-value" id="statExperience">—</div>
-        <div class="stat-label">Experience</div>
-        <div class="stat-desc">Work history entries</div>
-      </div>
-      <div class="stat-card animate-in" style="animation-delay:0.1s">
-        <div class="stat-icon" style="background:#fef2f2;color:#ef4444;"><i class="fa-solid fa-diagram-project"></i></div>
-        <div class="stat-value" id="statProjects">—</div>
-        <div class="stat-label">Projects</div>
-        <div class="stat-desc">Portfolio projects</div>
-      </div>
-      <div class="stat-card animate-in" style="animation-delay:0.15s">
-        <div class="stat-icon" style="background:#faf5ff;color:#a855f7;"><i class="fa-solid fa-graduation-cap"></i></div>
-        <div class="stat-value" id="statEducation">—</div>
-        <div class="stat-label">Education</div>
-        <div class="stat-desc">Degrees & certifications</div>
+      <div class="stats-grid">
+        <div class="stat-card animate-in">
+          <div class="stat-icon" style="background:#eef2ff;color:#6366f1;"><i class="fa-solid fa-user"></i></div>
+          <div class="stat-info">
+            <div class="stat-label">Profile</div>
+            <div class="stat-value" id="statProfile">—</div>
+          </div>
+          <div class="stat-desc">Your identity & social links</div>
+        </div>
+        <div class="stat-card animate-in" style="animation-delay:0.05s">
+          <div class="stat-icon" style="background:#ecfdf5;color:#10b981;"><i class="fa-solid fa-briefcase"></i></div>
+          <div class="stat-info">
+            <div class="stat-label">Experience</div>
+            <div class="stat-value" id="statExperience">—</div>
+          </div>
+          <div class="stat-desc">Work history entries</div>
+        </div>
+        <div class="stat-card animate-in" style="animation-delay:0.1s">
+          <div class="stat-icon" style="background:#fef2f2;color:#ef4444;"><i class="fa-solid fa-diagram-project"></i></div>
+          <div class="stat-info">
+            <div class="stat-label">Projects</div>
+            <div class="stat-value" id="statProjects">—</div>
+          </div>
+          <div class="stat-desc">Portfolio projects</div>
+        </div>
+        <div class="stat-card animate-in" style="animation-delay:0.15s">
+          <div class="stat-icon" style="background:#faf5ff;color:#a855f7;"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="stat-info">
+            <div class="stat-label">Education</div>
+            <div class="stat-value" id="statEducation">—</div>
+          </div>
+          <div class="stat-desc">Degrees & certifications</div>
+        </div>
       </div>
     </div>
-    <div class="content-card">
-      <div class="content-card-header">
-        <h3><i class="fa-solid fa-clock-rotate-left" style="margin-right:8px;color:var(--text-muted);"></i> Recent Activity</h3>
+
+    <div class="dash-section">
+      <div class="dash-section-header">
+        <i class="fa-solid fa-clock-rotate-left"></i> Recent Activity
       </div>
-      <div class="content-card-body" id="activityContainer">
-        ${renderActivityList(getActivity())}
+      <div class="dash-card">
+        <div id="activityContainer">
+          ${renderActivityList(getActivity())}
+        </div>
       </div>
     </div>
   `;
